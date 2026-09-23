@@ -21,7 +21,7 @@ Laraue Boards предоставляет удалённый **MCP** (Model Conte
 - **URL**: `https://boards.laraue.com/boards-mcp/mcp`
 - **Заголовок**: `X-Api-Key` со значением вашего API-ключа
 
-![Добавление MCP-коннектора Laraue Boards в Claude: URL сервера и заголовок X-Api-Key](https://laraue.com/static/images/blog/docs/laraue-boards/mcp-connector-setup.jpg)
+![Добавление MCP-коннектора Laraue Boards в Claude: URL сервера и заголовок X-Api-Key](https://laraue.com/static/images/blog/docs/laraue-boards/claude-mcp-connector-setup.jpg)
 
 Laraue Boards также размещён в [официальном реестре MCP](https://registry.modelcontextprotocol.io) под именем `com.laraue/boards`, поэтому любой другой MCP-совместимый клиент, умеющий искать в реестре, найдёт его так же.
 

@@ -21,7 +21,7 @@ In Claude, type `/mcp` to open the MCP connectors list, then choose the **custom
 - **URL**: `https://boards.laraue.com/boards-mcp/mcp`
 - **Header**: `X-Api-Key` set to your API key
 
-![Adding the Laraue Boards MCP connector in Claude, with the server URL and X-Api-Key header](https://laraue.com/static/images/blog/docs/laraue-boards/mcp-connector-setup.jpg)
+![Adding the Laraue Boards MCP connector in Claude, with the server URL and X-Api-Key header](https://laraue.com/static/images/blog/docs/laraue-boards/claude-mcp-connector-setup.jpg)
 
 Laraue Boards is also listed on the [official MCP Registry](https://registry.modelcontextprotocol.io) as `com.laraue/boards`, so any other MCP-compatible client that can browse the registry can find it the same way.
 
