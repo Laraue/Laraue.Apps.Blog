@@ -16,7 +16,7 @@ An [API key](/blog/documentation/laraue-boards/integrations/api-keys) for the or
 
 ## Connecting in Claude
 
-In Claude, add a custom remote connector:
+In Claude, type `/mcp` to open the MCP connectors list, then choose the **custom connector** option and add:
 
 - **URL**: `https://boards.laraue.com/boards-mcp/mcp`
 - **Header**: `X-Api-Key` set to your API key

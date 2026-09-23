@@ -16,7 +16,7 @@ Laraue Boards предоставляет удалённый **MCP** (Model Conte
 
 ## Подключение в Claude
 
-В Claude добавьте кастомный удалённый коннектор:
+В Claude введите `/mcp`, чтобы открыть список MCP-коннекторов, выберите там вариант **custom connector** и добавьте:
 
 - **URL**: `https://boards.laraue.com/boards-mcp/mcp`
 - **Заголовок**: `X-Api-Key` со значением вашего API-ключа
