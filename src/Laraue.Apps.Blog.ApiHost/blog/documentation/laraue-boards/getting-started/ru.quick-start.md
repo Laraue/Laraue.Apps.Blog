@@ -16,7 +16,7 @@ updatedAt: 2026-08-20
 
 ![Кнопка запуска Mini App рядом с чатом бота](https://laraue.com/static/images/blog/docs/laraue-boards/message-board-bot-launch-mini-app-button.jpg)
 
-**В браузере** — зайдите на [boards.laraue.com](https://boards.laraue.com) и нажмите **Log in with Telegram**.
+**В браузере** — зайдите на [boards.laraue.com/login](https://boards.laraue.com/login) и нажмите **Log in with Telegram**.
 
 ![Экран входа в веб-версии с кнопкой Log in with Telegram](https://laraue.com/static/images/blog/docs/laraue-boards/web-login.jpg)
 

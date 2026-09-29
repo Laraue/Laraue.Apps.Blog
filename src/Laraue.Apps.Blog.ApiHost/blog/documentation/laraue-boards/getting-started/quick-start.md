@@ -16,7 +16,7 @@ This guide will help you get familiar with Laraue Boards. There's nothing to set
 
 ![The Mini App launch button next to the bot's chat](https://laraue.com/static/images/blog/docs/laraue-boards/message-board-bot-launch-mini-app-button.jpg)
 
-**In the browser** — visit [boards.laraue.com](https://boards.laraue.com) and tap **Log in with Telegram**.
+**In the browser** — visit [boards.laraue.com/login](https://boards.laraue.com/login) and tap **Log in with Telegram**.
 
 ![The web login screen with the Log in with Telegram button](https://laraue.com/static/images/blog/docs/laraue-boards/web-login.jpg)
 

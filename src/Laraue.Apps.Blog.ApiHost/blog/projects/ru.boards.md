@@ -156,4 +156,4 @@ WEEEK — универсальный сервис для небольших ко
 
 ## Как попробовать
 
-Откройте [@msgboard_bot](https://t.me/msgboard_bot) в Telegram или веб-приложение на [boards.laraue.com](https://boards.laraue.com). Короткий обзор продукта — на [странице Laraue Boards](../../boards), а в [документации](../documentation/laraue-boards) описан весь функционал и то, как им пользоваться.
+Откройте [@msgboard_bot](https://t.me/msgboard_bot) в Telegram или веб-приложение на [boards.laraue.com](https://boards.laraue.com). Короткий обзор продукта — на [странице Laraue Boards](https://boards.laraue.com/ru), а в [документации](../documentation/laraue-boards) описан весь функционал и то, как им пользоваться.
