@@ -155,4 +155,4 @@ Yes. Create an organization, share the invite link, and configure permissions fo
 
 ## How to try it
 
-Open [@msgboard_bot](https://t.me/msgboard_bot) in Telegram, or the web app at [boards.laraue.com](https://boards.laraue.com). A short overview of the product is on the [Laraue Boards page](../../boards), and the [documentation](../documentation/laraue-boards) describes all the functionality and how to use it.
+Open [@msgboard_bot](https://t.me/msgboard_bot) in Telegram, or the web app at [boards.laraue.com](https://boards.laraue.com). A short overview of the product is on the [Laraue Boards page](https://boards.laraue.com), and the [documentation](../documentation/laraue-boards) describes all the functionality and how to use it.

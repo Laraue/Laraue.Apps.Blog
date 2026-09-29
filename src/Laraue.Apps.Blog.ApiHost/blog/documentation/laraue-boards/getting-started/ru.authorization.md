@@ -23,7 +23,7 @@ Laraue Boards использует ваш существующий аккаун�
 
 ### В браузере
 
-Откройте [boards.laraue.com](https://boards.laraue.com) в любом браузере. Вы увидите экран входа с кнопкой **Log in with Telegram**. Нажатие на неё открывает всплывающее окно авторизации Telegram — подтвердите его, и вас вернёт обратно в приложение.
+Откройте [boards.laraue.com/login](https://boards.laraue.com/login) в любом браузере. Вы увидите экран входа с кнопкой **Log in with Telegram**. Нажатие на неё открывает всплывающее окно авторизации Telegram — подтвердите его, и вас вернёт обратно в приложение.
 
 ![Экран входа в веб-версии с кнопкой Log in with Telegram](https://laraue.com/static/images/blog/docs/laraue-boards/web-login.jpg)
 
