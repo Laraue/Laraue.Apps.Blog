@@ -18,7 +18,6 @@ public class RssController(ICmsBackend cmsBackend, IRssFeedGenerator rssGenerato
         
         items.AddRange(GetFeedItems("projects", languageCode));
         items.AddRange(GetFeedItems("articles", languageCode));
-        items.AddRange(GetFeedItems("documentation", languageCode));
         
         items = items.OrderByDescending(x => x.CreatedAt).ToList();
 

@@ -4,7 +4,7 @@ type: project
 tags: [telegram, task-tracker, kanban, project-management, open-source, saved-messages, jira-alternative, trello-alternative, asana-alternative, clickup-alternative, monday-alternative, linear-alternative]
 description: An open source task tracker that turns Telegram messages into cards on a kanban board. Send a message to the bot, get a card you can work with in the web app or the Mini App. Free, and the code is open.
 createdAt: 2026-04-16
-updatedAt: 2026-08-20
+updatedAt: 2026-09-29
 ---
 
 Telegram users often use the messenger as a place to keep thoughts, links, and photos — in Saved Messages or in separate chats. The problem is organising them afterwards. A message can be tagged, which helps with search and filtering in simple cases, but the more chats and messages there are, the harder it gets to tell what is still relevant and to find your way between them.
@@ -29,7 +29,7 @@ Most task trackers assume that tasks are created by a project manager and handed
 
 **Organise the tasks when you have time for it.** Open the Mini App from the bot or the web version in a browser, and work with a full kanban board: sort out the backlog, drag cards between columns, group them into epics. Every card holds a link to the message in the chat, so you can see the context it was created in.
 
-**The bot is a full participant in any chat.** [Link a chat](../documentation/laraue-boards/integrations/telegram-linking) — private or group — to a specific board with `/link`, choosing whether to [save messages automatically or only on the `/save` command](../documentation/laraue-boards/integrations/telegram-save-modes). In any Telegram chat you can also [find an issue with inline search](../documentation/laraue-boards/integrations/telegram-inline-search) — type `@msgboard_bot` and a query, without opening the app.
+**The bot is a full participant in any chat.** [Link a chat](https://boards.laraue.com/en/documentation/integrations/telegram-linking) — private or group — to a specific board with `/link`, choosing whether to [save messages automatically or only on the `/save` command](https://boards.laraue.com/en/documentation/integrations/telegram-save-modes). In any Telegram chat you can also [find an issue with inline search](https://boards.laraue.com/en/documentation/integrations/telegram-inline-search) — type `@msgboard_bot` and a query, without opening the app.
 
 ## Spaces, issue keys, and permissions
 
@@ -155,4 +155,4 @@ Yes. Create an organization, share the invite link, and configure permissions fo
 
 ## How to try it
 
-Open [@msgboard_bot](https://t.me/msgboard_bot) in Telegram, or the web app at [boards.laraue.com](https://boards.laraue.com). A short overview of the product is on the [Laraue Boards page](https://boards.laraue.com), and the [documentation](../documentation/laraue-boards) describes all the functionality and how to use it.
+Open [@msgboard_bot](https://t.me/msgboard_bot) in Telegram, or the web app at [boards.laraue.com](https://boards.laraue.com). A short overview of the product is on the [Laraue Boards page](https://boards.laraue.com), and the [documentation](https://boards.laraue.com/en/documentation) describes all the functionality and how to use it.
