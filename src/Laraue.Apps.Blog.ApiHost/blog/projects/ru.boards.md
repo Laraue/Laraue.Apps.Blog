@@ -4,7 +4,7 @@ type: project
 tags: [telegram, таск-трекер, kanban, project-management, open-source, saved-messages, jira-alternative, yandex-tracker-alternative, kaiten-alternative, yougile-alternative, weeek-alternative, trello-alternative]
 description: Опенсорсный таск-трекер, превращающий сообщения из Telegram в карточки на канбан-доске. Отправляете сообщение боту — получаете карточку, с которой можно работать в веб-приложении или Mini App. Бесплатно, код открыт.
 createdAt: 2026-04-16
-updatedAt: 2026-08-20
+updatedAt: 2026-09-29
 ---
 
 Пользователи Telegram часто используют мессенджер, как место для хранения мыслей, ссылок и фотографий в «Сохраненных сообщениях» или отдельных чатах. Проблемой является их последующая организация. Сообщения можно пометить тегом, что помогает в поиске и фильтрациях в простых случаях, но чем больше чатов и сообщений становится, тем сложнее понимать, что из этого актуально и ориентироваться между ними.
@@ -30,7 +30,7 @@ Laraue Boards пытается закрыть эти пробелы, остав�
 
 **Занимайтесь организацией задач, когда на это есть время.** Откройте Mini App из бота или веб-версию в браузере — и работайте с полноценной канбан-доской: рассортируйте бэклог, перетаскивайте карточки между колонками, группируйте их в эпики. Каждая карточка содержит ссылку на сообщение в чате — можно понять контекст, при котором она была создана.
 
-**Бот — полноценный участник любого чата.** [Привяжите чат](../documentation/laraue-boards/integrations/telegram-linking) — личный или групповой — к конкретной доске командой `/link`, выбрав, [сохранять ли сообщения автоматически или только по команде `/save`](../documentation/laraue-boards/integrations/telegram-save-modes). В любом чате Telegram можно и [найти issue через inline-поиск](../documentation/laraue-boards/integrations/telegram-inline-search) — ввести `@msgboard_bot` и запрос, не открывая приложение.
+**Бот — полноценный участник любого чата.** [Привяжите чат](https://boards.laraue.com/ru/documentation/integrations/telegram-linking) — личный или групповой — к конкретной доске командой `/link`, выбрав, [сохранять ли сообщения автоматически или только по команде `/save`](https://boards.laraue.com/ru/documentation/integrations/telegram-save-modes). В любом чате Telegram можно и [найти issue через inline-поиск](https://boards.laraue.com/ru/documentation/integrations/telegram-inline-search) — ввести `@msgboard_bot` и запрос, не открывая приложение.
 
 ## Спейсы, номера issues и права доступа
 
@@ -156,4 +156,4 @@ WEEEK — универсальный сервис для небольших ко
 
 ## Как попробовать
 
-Откройте [@msgboard_bot](https://t.me/msgboard_bot) в Telegram или веб-приложение на [boards.laraue.com](https://boards.laraue.com). Короткий обзор продукта — на [странице Laraue Boards](https://boards.laraue.com/ru), а в [документации](../documentation/laraue-boards) описан весь функционал и то, как им пользоваться.
+Откройте [@msgboard_bot](https://t.me/msgboard_bot) в Telegram или веб-приложение на [boards.laraue.com](https://boards.laraue.com). Короткий обзор продукта — на [странице Laraue Boards](https://boards.laraue.com/ru), а в [документации](https://boards.laraue.com/ru/documentation) описан весь функционал и то, как им пользоваться.

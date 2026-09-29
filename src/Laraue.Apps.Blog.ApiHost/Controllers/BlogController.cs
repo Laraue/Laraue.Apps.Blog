@@ -33,7 +33,6 @@ public class BlogController(ICmsBackend cmsBackend) : ControllerBase
                 Depth = 2,
                 FromPath = RootPath,
             })
-            .Where(x => x.FileName != "documentation")
             .Where(x => x.FileName != "undefined")
             .ToList();
 

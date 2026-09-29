@@ -3,14 +3,14 @@ title: Building a Jira alternative solo — why we are doing it and the reposito
 description: Part 1 of building a Telegram task tracker solo with AI. What problem we are solving, why the world needs another task tracker, and which two repositories the article series is built on.
 type: article
 createdAt: 2026-06-19 13:00
-updatedAt: 2026-07-10 11:00
+updatedAt: 2026-09-29 11:00
 projects: [boards]
 tags: [dotnet, nuxt, telegram, task-tracker, devlog, architecture]
 nextLink: prototyping-ui-with-ai-before-code
 ---
 
 > **Architecture First: Building a Jira Alternative Solo, AI-Assisted** — Part 1.
-> This is the introductory article of a series about how Laraue Boards is being built: the decisions, the trade-offs, and the mistakes. Development is iterative; each article solves a problem or produces a new version of the app. If you are interested in the product itself rather than how it is made, you can open the [project](https://boards.laraue.com), the page with [detailed description](../projects/boards) or [documentation](../documentation/laraue-boards).
+> This is the introductory article of a series about how Laraue Boards is being built: the decisions, the trade-offs, and the mistakes. Development is iterative; each article solves a problem or produces a new version of the app. If you are interested in the product itself rather than how it is made, you can open the [project](https://boards.laraue.com), the page with [detailed description](../projects/boards) or [documentation](https://boards.laraue.com/en/documentation).
 
 The first article is about why we decided to write yet another task tracker, what the product is meant to be, and where to see its source. The engineering part is described in the following articles.
 
@@ -36,7 +36,7 @@ After the core functionality stabilizes — embedding AI into the workflow. The 
 
 ## Where to see the current version
 
-Laraue Boards is available at [boards.laraue.com](https://boards.laraue.com). The current [documentation](https://laraue.com/blog/documentation/laraue-boards) describes the implemented functionality and how to use it.
+Laraue Boards is available at [boards.laraue.com](https://boards.laraue.com). The current [documentation](https://boards.laraue.com/en/documentation) describes the implemented functionality and how to use it.
 
 ### Repositories
 

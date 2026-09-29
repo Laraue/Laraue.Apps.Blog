@@ -16,19 +16,6 @@ public class ManuItem
     public required int Count { get; init; }
 }
 
-public class DocsMenuSection
-{
-    public required string Title { get; init; }
-    public required string[] Path { get; init; }
-    public required DocsMenuItem[] Children { get; init; }
-}
-
-public class DocsMenuItem
-{
-    public required string? Title { get; init; }
-    public required string[] Path { get; init; }
-}
-
 public class CardItem
 {
     public required string FileName { get; init; }
@@ -64,11 +51,4 @@ public class NeighborCard
 {
     public required string Title { get; init; }
     public required string[] Path { get; init; }
-}
-
-public class CardMeta
-{
-    public required string? Title { get; init; }
-    public required string? Description { get; init; }
-    public required string? Icon { get; init; }
 }

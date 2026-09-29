@@ -88,68 +88,6 @@ internal static class BlogQueryHelpers
         return ObjectCreator.Initialize<CardDetail>(entity);
     }
 
-    public static CardMeta GetSectionMeta(ICmsBackend cmsBackend, string[] path, string languageCode)
-    {
-        return cmsBackend
-            .GetEntity<CardMeta>(new GetEntityRequest
-            {
-                Path = path,
-                LanguageCode = languageCode,
-                Properties = [
-                    "title",
-                    "description",
-                    "icon",
-                ]
-            });
-    }
-
-    public static List<ManuItem> GetTree(ICmsBackend cmsBackend, string[] fromPath, string languageCode, int depth)
-    {
-        return cmsBackend
-            .GetSections(new GetSectionsRequest
-            {
-                LanguageCode = languageCode,
-                Depth = depth,
-                FromPath = fromPath,
-            })
-            .Select(Map)
-            .ToList();
-    }
-
-    public static DocsMenuSection[] GetMenu(ICmsBackend cmsBackend, string[] fromPath, string languageCode)
-    {
-        var rows = cmsBackend
-            .GetSections(new GetSectionsRequest
-            {
-                LanguageCode = languageCode,
-                Depth = 2,
-                FromPath = fromPath,
-            });
-
-        var result = new List<DocsMenuSection>();
-        foreach (var row in ApplyOrdering(rows))
-        {
-            var childrenResult = new List<DocsMenuItem>();
-            foreach (var child in ApplyOrdering(row.Children))
-            {
-                childrenResult.Add(new DocsMenuItem
-                {
-                    Title = child.Title,
-                    Path = child.FullPath,
-                });
-            }
-
-            result.Add(new DocsMenuSection
-            {
-                Children = childrenResult.ToArray(),
-                Title = row.Title,
-                Path = row.FullPath,
-            });
-        }
-
-        return result.ToArray();
-    }
-
     public static List<Tag> GetTags(ICmsBackend cmsBackend, string[] fromPath, string languageCode)
     {
         var values = cmsBackend
@@ -176,16 +114,6 @@ internal static class BlogQueryHelpers
             Title = x.Title,
             Icon = x.MdFile?.GetValueOrDefault("icon") as string,
         };
-    }
-
-    public static IOrderedEnumerable<SectionItem> ApplyOrdering(IEnumerable<SectionItem> sections)
-    {
-        return sections.OrderBy(x =>
-        {
-            if (x.MdFile is null)
-                return 0;
-            return x.MdFile.TryGetValue("order", out var value) ? value : 0;
-        });
     }
 
     private static void TryAddLink(
