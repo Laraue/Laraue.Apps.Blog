@@ -4,7 +4,7 @@ type: project
 tags: [csharp, dotnet, web-scraping, crawler, anglesharp, puppeteersharp, html-parsing]
 description: Laraue.Crawling is a strongly typed C# web scraping library for .NET that supports static HTML, JavaScript-rendered pages, and XML. Define maintainable crawling schemas in code — no spaghetti selectors.
 createdAt: 2025-11-01
-updatedAt: 2026-06-10
+updatedAt: 2026-09-30
 ---
 Most C# web scraping code works until it doesn't. A site changes its layout, a selector breaks, and you're
 staring at a tangle of string selectors with no types, no tests, and no clear place to make the fix.
@@ -164,11 +164,11 @@ Yes, the library targets modern .NET versions.
 
 ## Real-World Usage
 
-Laraue.Crawling runs in production as part of [SPB Real Estate](https://github.com/win7user10/Laraue.Apps.RealEstate),
+Laraue.Crawling runs in production as part of [SPB Real Estate](https://github.com/Laraue/Laraue.Apps.RealEstate),
 a property monitoring service that continuously crawls two of Russia's largest listing platforms —
-[Avito](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.Impl/Avito/AvitoCrawlingSchema.cs)
+[Avito](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.Impl/Avito/AvitoCrawlingSchema.cs)
 and
-[Cian](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.Impl/Cian/CianCrawlingSchema.cs)
+[Cian](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.Impl/Cian/CianCrawlingSchema.cs)
 — extracting listings as scheduled jobs.
 
 ---

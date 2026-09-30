@@ -3,7 +3,7 @@ title: Объединение группы изображений в одну з
 description: Часть 12 цикла о разработке Telegram-таск-трекера в одиночку. Telegram присылает альбом изображений отдельными сообщений, а правки — новыми апдейтами. Разбираем, как собрать медиагруппу в одну запись без привычного таймера-аккумулятора и как трактовать правку как обновление, а не дубль.
 type: article
 createdAt: 2026-06-26 15:00
-updatedAt: 2026-06-29 15:00
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [dotnet, telegram-bot, media-groups, devlog]
 previousLink: telegram-bot-file-storage-stream
@@ -19,7 +19,7 @@ nextLink: telegram-login-widget-dotnet-auth
 
 Начнём с простого. Когда кто-то правит сообщение, ранее отправленное в чат, приложение получит от Telegram апдейт *отредактированного сообщения* и должно обработать его как `upsert` (`update`, если сообщение было сохранено ранее, `insert` - если нет).
 
-Для этого в Middleware из [прошлой статьи](telegram-bot-file-storage-stream) ([`HandleAllMessagesMiddleware`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs)), разрешается чтение двух типов апдейтов:
+Для этого в Middleware из [прошлой статьи](telegram-bot-file-storage-stream) ([`HandleAllMessagesMiddleware`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs)), разрешается чтение двух типов апдейтов:
 
 ```csharp
 private static readonly UpdateType[] AllowedUpdates =
@@ -35,11 +35,11 @@ private static readonly UpdateType[] AllowedUpdates =
 var message = context.Update.Message ?? context.Update.EditedMessage;
 ```
 
-Для приложения нет никакой разницы, было сообщение отредактировано или сохраняется впервые - его логика обработки и так была построена на `upsert` — сохранить, если не было; обновить, если было. Причина этого - стремление к отказоустойчивости. При лагах в системе, любое сообщение может обработаться несколько раз и без `upsert` логики могли бы появляться фантомные записи. Как результат, отредактированное фото всё так же маппится через `GetPhotoRequest`, отредактированный текст — через `GetMessageRequest`, и так далее. [Middleware](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs) не содержит ветвлений вида «правка это или нет»; он занимается маппингом, а разбор как обрабатывать запись, как новую или старую, делегируется в [save-сервис](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs).
+Для приложения нет никакой разницы, было сообщение отредактировано или сохраняется впервые - его логика обработки и так была построена на `upsert` — сохранить, если не было; обновить, если было. Причина этого - стремление к отказоустойчивости. При лагах в системе, любое сообщение может обработаться несколько раз и без `upsert` логики могли бы появляться фантомные записи. Как результат, отредактированное фото всё так же маппится через `GetPhotoRequest`, отредактированный текст — через `GetMessageRequest`, и так далее. [Middleware](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs) не содержит ветвлений вида «правка это или нет»; он занимается маппингом, а разбор как обрабатывать запись, как новую или старую, делегируется в [save-сервис](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs).
 
 ## Реализация upsert логики для обработки нового или редактирования старого сообщения
 
-Сообщения от Telegram обрабатываются последовательно, поэтому логика «создание или обновления» работает в разрезе одного сообщения. Для начала [save-сервис](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) пытается найти существующую запись по внешнему идентификатору — ID сообщения Telegram + чат, из которого оно пришло. Важно использовать именно связку идентификаторов, так как ID сообщения в разных чатах может повторяться:
+Сообщения от Telegram обрабатываются последовательно, поэтому логика «создание или обновления» работает в разрезе одного сообщения. Для начала [save-сервис](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) пытается найти существующую запись по внешнему идентификатору — ID сообщения Telegram + чат, из которого оно пришло. Важно использовать именно связку идентификаторов, так как ID сообщения в разных чатах может повторяться:
 
 ```csharp
 var savedMessage = await context.TelegramMessages
@@ -105,7 +105,7 @@ return new GetOrCreateMessageResult
 
 ## Реакция вместо сообщения о результате обработки
 
-Фидбэк пользователю минимальный: это реакция на его собственное сообщение. [`TelegramMessageService`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramMessageService.cs) выставляет реакцию в зависимости от результата сохранения:
+Фидбэк пользователю минимальный: это реакция на его собственное сообщение. [`TelegramMessageService`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramMessageService.cs) выставляет реакцию в зависимости от результата сохранения:
 
 ```csharp
 var result = await saveMessageService.Save(request, cancellationToken);
@@ -140,9 +140,9 @@ private async Task SetReaction(
 
 ## Обработка группы медиа Telegram
 
-Когда пользователь шлёт несколько фото разом, Telegram не отправляет одно сообщение с несколькими фото, как этого многие ожидают. Он отправляет *несколько отдельных апдейтов*, с одинаковым **media group id**, приходящих без гарантированного порядка. Собирать эту группу обратно в один объект Telegram предлагает приложениям самостоятельно. За это в коде отвечает метод [`SaveGroupMessageEntity`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs).
+Когда пользователь шлёт несколько фото разом, Telegram не отправляет одно сообщение с несколькими фото, как этого многие ожидают. Он отправляет *несколько отдельных апдейтов*, с одинаковым **media group id**, приходящих без гарантированного порядка. Собирать эту группу обратно в один объект Telegram предлагает приложениям самостоятельно. За это в коде отвечает метод [`SaveGroupMessageEntity`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs).
 
-Для пользователя группа изображений — это одно сообщение. И он ожидает увидеть на доске карточку с N вложениями. [Save сервис](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) имеет ветвление, чтобы обрабатывать групповые случаи отдельно:
+Для пользователя группа изображений — это одно сообщение. И он ожидает увидеть на доске карточку с N вложениями. [Save сервис](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) имеет ветвление, чтобы обрабатывать групповые случаи отдельно:
 
 ```csharp
 private Task<GetOrCreateMessageResult> SaveMessageEntity(
@@ -159,7 +159,7 @@ private Task<GetOrCreateMessageResult> SaveMessageEntity(
 
 Наша реализация избегает таймера, опираясь на использование базы, а не оперативной памяти. Мы не ждем, когда альбом закончится, а связываем сообщения по мере их появления. В основе — несколько идей. 
 
-Во-первых, медиагруппа получает локальный [идентификатор](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramMediaGroup.cs) в базе. Все отдельные сообщения одного альбома связываются с этой строкой с помощью [`GetOrCreateTelegramMediaGroupId`](https://github.com/win7user10/Laraue.Apps.Boards/blob/1876814afe9fdef5fdcfb4468e581c55bb379550/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs):
+Во-первых, медиагруппа получает локальный [идентификатор](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramMediaGroup.cs) в базе. Все отдельные сообщения одного альбома связываются с этой строкой с помощью [`GetOrCreateTelegramMediaGroupId`](https://github.com/Laraue/Laraue.Apps.Boards/blob/1876814afe9fdef5fdcfb4468e581c55bb379550/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs):
 ```csharp
 private async Task<long> GetOrCreateTelegramMediaGroupId(string groupId)
 {

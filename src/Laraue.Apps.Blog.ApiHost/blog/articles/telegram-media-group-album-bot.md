@@ -3,7 +3,7 @@ title: One card from a Telegram album — handling media groups and edits in a b
 description: Part 12 of building a Telegram task tracker solo. Telegram delivers an album as a burst of separate messages and an edit as a fresh update — here is how to turn a media group into a single record without the usual timeout accumulator, and how to treat an edit as an update instead of a duplicate.
 type: article
 createdAt: 2026-06-26 15:00
-updatedAt: 2026-06-29 15:00
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [dotnet, telegram-bot, media-groups, devlog]
 previousLink: telegram-bot-file-storage-stream
@@ -19,7 +19,7 @@ Until now the save process assumed a message in the chat never changes after the
 
 Start with the simpler case. When someone edits a message they already sent to the chat, the app receives an *edited message* update from Telegram and has to handle it as an `upsert` — `update` if the message was saved before, `insert` if not.
 
-For that, the middleware from the [previous article](telegram-bot-file-storage-stream) ([`HandleAllMessagesMiddleware`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs)) allows reading two update types:
+For that, the middleware from the [previous article](telegram-bot-file-storage-stream) ([`HandleAllMessagesMiddleware`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs)) allows reading two update types:
 
 ```csharp
 private static readonly UpdateType[] AllowedUpdates =
@@ -35,11 +35,11 @@ The `Message` object is the same in both update types, so we read it like this:
 var message = context.Update.Message ?? context.Update.EditedMessage;
 ```
 
-For the app there is no difference whether a message was edited or saved for the first time — its handling logic was built around `upsert` from the start: save if it was not there, update if it was. The reason is fault tolerance. When the system lags, any message can be processed more than once, and without `upsert` logic that would create phantom records. As a result, an edited photo is still mapped by `GetPhotoRequest`, an edited text by `GetMessageRequest`, and so on. The [middleware](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs) has no branch like "is this an edit or not"; it does the mapping, and the decision of how to handle the record — as new or existing — is delegated to the [save service](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs).
+For the app there is no difference whether a message was edited or saved for the first time — its handling logic was built around `upsert` from the start: save if it was not there, update if it was. The reason is fault tolerance. When the system lags, any message can be processed more than once, and without `upsert` logic that would create phantom records. As a result, an edited photo is still mapped by `GetPhotoRequest`, an edited text by `GetMessageRequest`, and so on. The [middleware](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs) has no branch like "is this an edit or not"; it does the mapping, and the decision of how to handle the record — as new or existing — is delegated to the [save service](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs).
 
 ## Implementing upsert for a new or edited message
 
-Messages from Telegram are processed one at a time, so the create-or-update logic works in terms of a single message. First, the [save service](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) tries to find an existing record by its external identity — the Telegram message id plus the chat it came from. The pair matters, because a message id can repeat across different chats:
+Messages from Telegram are processed one at a time, so the create-or-update logic works in terms of a single message. First, the [save service](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) tries to find an existing record by its external identity — the Telegram message id plus the chat it came from. The pair matters, because a message id can repeat across different chats:
 
 ```csharp
 var savedMessage = await context.TelegramMessages
@@ -105,7 +105,7 @@ return new GetOrCreateMessageResult
 
 ## A reaction instead of a status message
 
-The feedback to the user is minimal: a reaction on their own message. [`TelegramMessageService`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramMessageService.cs) sets the reaction based on the save result:
+The feedback to the user is minimal: a reaction on their own message. [`TelegramMessageService`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramMessageService.cs) sets the reaction based on the save result:
 
 ```csharp
 var result = await saveMessageService.Save(request, cancellationToken);
@@ -140,9 +140,9 @@ There was one more small idea here: changing the reaction on *every* edit, so re
 
 ## Handling a Telegram media group
 
-When a user sends several photos at once, Telegram does not send one message with several photos, as many expect. It sends *several separate updates* with the same **media group id**, arriving with no guaranteed order. Telegram leaves it to the app to assemble that group back into one object. The [`SaveGroupMessageEntity`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) method is responsible for this.
+When a user sends several photos at once, Telegram does not send one message with several photos, as many expect. It sends *several separate updates* with the same **media group id**, arriving with no guaranteed order. Telegram leaves it to the app to assemble that group back into one object. The [`SaveGroupMessageEntity`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) method is responsible for this.
 
-To the user, a group of images is one message, and they expect to see one card with N attachments on the board. The [save service](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) has a branch to handle the group case separately:
+To the user, a group of images is one message, and they expect to see one card with N attachments on the board. The [save service](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs) has a branch to handle the group case separately:
 
 ```csharp
 private Task<GetOrCreateMessageResult> SaveMessageEntity(
@@ -159,7 +159,7 @@ The common solution for saving groups, the one you find on forums, is a **timer-
 
 Our implementation avoids the timer by relying on the database rather than RAM. We do not wait for the album to finish; we link the messages as they arrive. It rests on a few ideas.
 
-First, the media group gets a local [identifier](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramMediaGroup.cs) in the database. All the separate messages of one album are tied to that row through [`GetOrCreateTelegramMediaGroupId`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs):
+First, the media group gets a local [identifier](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramMediaGroup.cs) in the database. All the separate messages of one album are tied to that row through [`GetOrCreateTelegramMediaGroupId`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs):
 
 ```csharp
 private async Task<long> GetOrCreateTelegramMediaGroupId(string groupId)

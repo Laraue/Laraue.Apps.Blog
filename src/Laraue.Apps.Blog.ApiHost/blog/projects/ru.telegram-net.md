@@ -4,7 +4,7 @@ type: project
 tags: [telegram, dotnet, csharp, telegram-bot, aspnet-core, mvc, middleware, authentication, localization, bot-development, webhook, long-polling]
 description: Устали от цепочек if-else в Telegram-боте? Laraue.Telegram.NET привносит контроллеры, middleware, аутентификацию и локализацию в стиле ASP.NET Core в разработку ботов на .NET.
 createdAt: 2025-03-04
-updatedAt: 2026-06-13
+updatedAt: 2026-09-30
 ---
 Если вы уже разрабатывали ASP.NET Core API, написание Telegram-бота не должно ощущаться как нечто новое.
 **Laraue.Telegram.NET** переносит знакомый паттерн контроллеров и middleware в разработку Telegram-ботов —
@@ -12,7 +12,7 @@ updatedAt: 2026-06-13
 
 [![NuGet](https://img.shields.io/nuget/v/Laraue.Telegram.NET.Core)](https://www.nuget.org/packages/Laraue.Telegram.NET.Core)
 [![Downloads](https://img.shields.io/nuget/dt/Laraue.Telegram.NET.Core)](https://www.nuget.org/packages/Laraue.Telegram.NET.Core)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/win7user10/Laraue.Telegram.NET)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/Laraue/Laraue.Telegram.NET)
 
 ---
 
@@ -178,4 +178,4 @@ Resources/Buttons.fr.resx    ← Французский
 Библиотека используется в двух продакшн-проектах: приложении для изучения иностранных языков и боте
 мониторинга недвижимости — в обоих Telegram является основным интерфейсом взаимодействия с пользователем.
 
-**Исходный код:** [github.com/win7user10/Laraue.Telegram.NET](https://github.com/win7user10/Laraue.Telegram.NET)
+**Исходный код:** [github.com/Laraue/Laraue.Telegram.NET](https://github.com/Laraue/Laraue.Telegram.NET)

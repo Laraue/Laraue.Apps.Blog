@@ -4,13 +4,13 @@ type: project
 tags: [telegram, dotnet, csharp, telegram-bot, aspnet-core, mvc, middleware, authentication, localization, bot-development, webhook, long-polling]
 description: Stop writing if-else chains for Telegram bot routing. Laraue.Telegram.NET brings ASP.NET-style controllers, middleware, authentication, and localization to .NET 9 Telegram bot development.
 createdAt: 2025-11-01
-updatedAt: 2026-06-13
+updatedAt: 2026-09-30
 ---
 If you've built ASP.NET Core APIs before, writing a Telegram bot shouldn't feel like starting over. **Laraue.Telegram.NET** brings the controller/middleware pattern you already know to Telegram bot development — routing, dependency injection, authentication, roles, and localization, all wired together cleanly.
 
 [![NuGet](https://img.shields.io/nuget/v/Laraue.Telegram.NET.Core)](https://www.nuget.org/packages/Laraue.Telegram.NET.Core)
 [![Downloads](https://img.shields.io/nuget/dt/Laraue.Telegram.NET.Core)](https://www.nuget.org/packages/Laraue.Telegram.NET.Core)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/win7user10/Laraue.Telegram.NET)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/Laraue/Laraue.Telegram.NET)
 
 ---
 
@@ -163,4 +163,4 @@ Install only what you need — the packages are independent.
 
 This library powers two production projects: a language learning app and a real estate monitoring bot, both using Telegram as their primary user interface.
 
-**Source:** [github.com/win7user10/Laraue.Telegram.NET](https://github.com/win7user10/Laraue.Telegram.NET)
+**Source:** [github.com/Laraue/Laraue.Telegram.NET](https://github.com/Laraue/Laraue.Telegram.NET)

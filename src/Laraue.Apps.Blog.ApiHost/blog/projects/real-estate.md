@@ -2,12 +2,12 @@
 title: AI Apartment Search for Saint Petersburg — Ranked by Photo Quality
 type: project
 projectType: application
-githubLink: https://github.com/win7user10/Laraue.Apps.RealEstate
+githubLink: https://github.com/Laraue/Laraue.Apps.RealEstate
 applicationLink: https://apartments.laraue.com
 tags: [real-estate, apartment-search, saint-petersburg, ai-ranking, cian-alternative, renovation-quality, telegram, notifications]
 description: Stop scrolling bad listings. This free tool crawls Saint Petersburg real estate and ranks every apartment by renovation quality using AI photo analysis. Filter by district, price, rooms, and AI score. Get Telegram notifications for new matches.
 createdAt: 2025-11-01
-updatedAt: 2026-06-12
+updatedAt: 2026-09-30
 ---
 Scrolling through hundreds of Saint Petersburg apartment listings is exhausting. Half the photos are dark, blurry, or staged to hide problems. Prices vary wildly for what looks like similar flats. And unless you've spent years in the market, it's nearly impossible to tell a genuinely good deal from a bad one just from the listing page.
 
@@ -91,7 +91,7 @@ Real data, real AI scores, updated every 4 hours from live Saint Petersburg list
 
 **[Open the app at apartments.laraue.com](https://apartments.laraue.com)**
 
-The project is open source (MIT license) at [github.com/win7user10/Laraue.Apps.RealEstate](https://github.com/win7user10/Laraue.Apps.RealEstate). The most useful contributions are new crawler schemas for additional real estate sources, or improvements to the Ollama prompt for more accurate renovation scoring.
+The project is open source (MIT license) at [github.com/Laraue/Laraue.Apps.RealEstate](https://github.com/Laraue/Laraue.Apps.RealEstate). The most useful contributions are new crawler schemas for additional real estate sources, or improvements to the Ollama prompt for more accurate renovation scoring.
 
 ---
 

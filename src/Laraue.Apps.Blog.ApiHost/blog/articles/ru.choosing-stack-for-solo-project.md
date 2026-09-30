@@ -3,7 +3,7 @@ title: Выбор стека пет-проекта для соло-разраб�
 description: Часть 4 цикла о разработке Telegram-таск-трекера в одиночку. Причины выбора .NET 10, PostgreSQL 18, Nuxt 4 и Vue 3. Немного о переезде с MongoDB на Postgres в прошлом проекте, который научил нас отдавать предпочтение скучным стабильным технологиям.
 type: article
 createdAt: 2026-06-20 22:35
-updatedAt: 2026-07-08 14:48
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [dotnet, nuxt, vue, postgres, mongodb, база-данных, devlog, архитектура]
 previousLink: telegram-saved-messages-to-task-tracker
@@ -53,7 +53,7 @@ PostgreSQL выбран по той же причине, что и .NET. Мы з
 
 **Права доступа.** Наши сотрудники имели опыт реализации управления правами пользователей в реляционной базе, поэтому не было причин ждать, что Boards окажется исключением.
 
-Все кейсы казались реализуемыми на реляционной БД. Забегая немного вперед — получившиеся модели можно посмотреть в [папке DataAccess/Models](https://github.com/win7user10/Laraue.Apps.Boards/tree/main/src/Laraue.Apps.Boards.DataAccess/Models) бэкенд-репозитория.
+Все кейсы казались реализуемыми на реляционной БД. Забегая немного вперед — получившиеся модели можно посмотреть в [папке DataAccess/Models](https://github.com/Laraue/Laraue.Apps.Boards/tree/main/src/Laraue.Apps.Boards.DataAccess/Models) бэкенд-репозитория.
 
 ## Фронтенд: Nuxt 4 и Vue 3
 

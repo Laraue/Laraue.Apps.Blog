@@ -3,7 +3,7 @@ title: Деплой Nuxt Telegram Mini App. Настройка HTTPS на nginx 
 description: Часть 7 цикла о разработке Telegram-таск-трекера в одиночку. Как задеплоить Nuxt Mini App в связке nginx + HTTPS + Let's Encrypt, настроить автопродление сертификатов через certbot, зарегистрировать mini app в BotFather и протестировать его локально через ngrok.
 type: article
 createdAt: 2026-06-23 12:00
-updatedAt: 2026-07-07 18:00
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [nginx, nuxt, telegram-mini-app, https, lets-encrypt, certbot, ngrok, self-hosting, devlog]
 previousLink: deploying-dotnet-postgres-vps-docker-compose
@@ -17,7 +17,7 @@ nextLink: telegram-mini-app-authentication-dotnet
 
 ## Создание Nuxt-приложения
 
-Фронтенд на [Nuxt](https://nuxt.com/) был развернут в новом репозитории [laraue-boards](https://github.com/win7user10/laraue-boards) командой:
+Фронтенд на [Nuxt](https://nuxt.com/) был развернут в новом репозитории [laraue-boards](https://github.com/Laraue/laraue-boards) командой:
 
 ```bash
 pnpm create nuxt@latest laraue-boards
@@ -25,7 +25,7 @@ pnpm create nuxt@latest laraue-boards
 
 Минимальный запускаемый Nuxt-проект — содержит лишь файловую структуру для будущего приложения и шаблонную страницу в `app.vue`.
 
-В первой версии мы хотим лишь научиться определять, что приложение было запущено из Telegram и вывести данные текущего пользователя. Telegram передаёт в mini app данные через свой SDK. Мы решили читать эти данные через Nuxt-плагин [`auth.init.ts`](https://github.com/win7user10/laraue-boards/blob/master/app/plugins/auth.init.ts), запускающийся до отрисовки приложения:
+В первой версии мы хотим лишь научиться определять, что приложение было запущено из Telegram и вывести данные текущего пользователя. Telegram передаёт в mini app данные через свой SDK. Мы решили читать эти данные через Nuxt-плагин [`auth.init.ts`](https://github.com/Laraue/laraue-boards/blob/master/app/plugins/auth.init.ts), запускающийся до отрисовки приложения:
 
 ```ts
 export default defineNuxtPlugin(async (nuxtApp) => {
@@ -70,7 +70,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
 ## GitHub CI-пайплайн фронтенда
 
-Пайплайн фронтенда [`build-and-publish.yml`](https://github.com/win7user10/laraue-boards/blob/master/.github/workflows/build-and-publish.yml) билдит SPA Nuxt-приложение и выгружает результат сборки на VPS:
+Пайплайн фронтенда [`build-and-publish.yml`](https://github.com/Laraue/laraue-boards/blob/master/.github/workflows/build-and-publish.yml) билдит SPA Nuxt-приложение и выгружает результат сборки на VPS:
 
 ```yaml
 name: Build Vue App
@@ -269,7 +269,7 @@ Server-блок порта 443 ссылается на файлы сертифи
 
 ## Локальная разработка Mini App через ngrok
 
-Требование HTTPS добавляет сложностей при локальной разработке: Telegram не откроет Mini App с `http://localhost:3000`. Мы используем — [ngrok](https://ngrok.com/), чтобы обойти это ограничение. `ngrok` создает публичный HTTPS-URL, туннелирующий запросы на локальный компьютер. Полную настройку можно увидеть в [README](https://github.com/win7user10/laraue-boards) репозитория фронтенда, но общий алгоритм такой:
+Требование HTTPS добавляет сложностей при локальной разработке: Telegram не откроет Mini App с `http://localhost:3000`. Мы используем — [ngrok](https://ngrok.com/), чтобы обойти это ограничение. `ngrok` создает публичный HTTPS-URL, туннелирующий запросы на локальный компьютер. Полную настройку можно увидеть в [README](https://github.com/Laraue/laraue-boards) репозитория фронтенда, но общий алгоритм такой:
 
 1. **Затуннелить локальные порты.** Конфиг `ngrok.yml` выставляет фронтенд (3000) и бэкенд (5200) как публичные HTTPS-URL через `ngrok start --all`.
 2. **Настроить бота на адреса, выданные ngrok.** В настройках Mini App в BotFather кнопка ставится на ngrok-URL фронтенда.

@@ -4,9 +4,9 @@ type: article
 projects: [real-estate]
 description: Как построить агрегатор недвижимости на .NET — парсинг через PuppeteerSharp с ранним завершением, интеграция Ollama vision model для оценки фото, штрафная формула ранжирования и уведомления в Telegram. Исходный код на GitHub.
 createdAt: 2026-04-16
-updatedAt: 2026-06-13
+updatedAt: 2026-09-30
 ---
-**Парсинг JavaScript-сайтов с объявлениями о недвижимости на C#, оценка каждого фото локальной vision-моделью и ранжирование результатов по качеству ремонта** — звучит как задача на выходные, пока не наткнёшься на реальные проблемы: редиректы для защиты от ботов, GPU-зависимый инференс, блокирующий краулер, и TensorFlow-модели, которые застревают на бесполезной точности. Эта статья разбирает, как [Laraue.Apps.RealEstate](https://github.com/win7user10/Laraue.Apps.RealEstate) решает каждую из этих проблем — с реальным кодом из репозитория.
+**Парсинг JavaScript-сайтов с объявлениями о недвижимости на C#, оценка каждого фото локальной vision-моделью и ранжирование результатов по качеству ремонта** — звучит как задача на выходные, пока не наткнёшься на реальные проблемы: редиректы для защиты от ботов, GPU-зависимый инференс, блокирующий краулер, и TensorFlow-модели, которые застревают на бесполезной точности. Эта статья разбирает, как [Laraue.Apps.RealEstate](https://github.com/Laraue/Laraue.Apps.RealEstate) решает каждую из этих проблем — с реальным кодом из репозитория.
 
 Работающее приложение доступно на [apartments.laraue.com](https://apartments.laraue.com). Если вас интересует, что оно делает с точки зрения пользователя, а не как устроено внутри — смотрите [описание продукта](../projects/real-estate).
 
@@ -32,7 +32,7 @@ ApiHost          → обслуживает фронтенд и Telegram-бот�
 
 ### BaseCrawlingSchemaParser: повторные попытки, рандомизация, защита от блокировок
 
-`BaseCrawlingSchemaParser` ([исходник](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.AppServices/BaseCrawlingSchemaParser.cs)) управляет жизненным циклом браузера и навигацией по страницам:
+`BaseCrawlingSchemaParser` ([исходник](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.AppServices/BaseCrawlingSchemaParser.cs)) управляет жизненным циклом браузера и навигацией по страницам:
 
 ```csharp
 public Task<CrawlingResult> ParseLinkAsync(string link, CancellationToken cancellationToken = default)
@@ -63,7 +63,7 @@ if (result?.Url != link)
 
 ### CianCrawlingSchema: декларативное извлечение DOM
 
-`CianCrawlingSchema` ([исходник](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.AppServices/Cian/CianCrawlingSchema.cs)) определяет логику извлечения декларативно через fluent API `PuppeterSharpSchemaBuilder` из библиотеки [Laraue.Crawling](https://github.com/win7user10/Laraue.Crawling):
+`CianCrawlingSchema` ([исходник](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.AppServices/Cian/CianCrawlingSchema.cs)) определяет логику извлечения декларативно через fluent API `PuppeterSharpSchemaBuilder` из библиотеки [Laraue.Crawling](https://github.com/win7user10/Laraue.Crawling):
 
 ```csharp
 return new PuppeterSharpSchemaBuilder<CrawlingResult>()
@@ -146,7 +146,7 @@ pageBuilder.BindManually(async (element, modelBinder) =>
 
 ### EstimateImagesRenovationJob
 
-`EstimateImagesRenovationJob` ([исходник](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.GpuWorkerHost/Jobs/EstimateImagesRenovationJob.cs)) запускается в `GpuWorkerHost` по расписанию раз в минуту. Дизайн задачи использует паттерн, заслуживающий отдельного внимания: **вложенный интерфейс `IRepository`** размещает контракт доступа к данным рядом с задачей, которой он принадлежит:
+`EstimateImagesRenovationJob` ([исходник](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.GpuWorkerHost/Jobs/EstimateImagesRenovationJob.cs)) запускается в `GpuWorkerHost` по расписанию раз в минуту. Дизайн задачи использует паттерн, заслуживающий отдельного внимания: **вложенный интерфейс `IRepository`** размещает контракт доступа к данным рядом с задачей, которой он принадлежит:
 
 ```csharp
 public class EstimateImagesRenovationJob(...) : BaseJob
@@ -253,7 +253,7 @@ public record PredictionResult
 
 ## Интеграция с Telegram
 
-Система отправляет ранжированные объявления в Telegram через `AdvertisementsTelegramSender` ([исходник](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Telegram.AppServices/AdvertisementsTelegramSender.cs)). Есть два режима доставки:
+Система отправляет ранжированные объявления в Telegram через `AdvertisementsTelegramSender` ([исходник](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Telegram.AppServices/AdvertisementsTelegramSender.cs)). Есть два режима доставки:
 
 **Персональные подборки.** Пользователи настраивают `Selection` с кастомными критериями — диапазон цен, количество комнат, район, минимальный ИИ-рейтинг, интервал уведомлений. Отправитель запрашивает базу по этим критериям и пушит результаты по настроенному расписанию. Пагинация реализована через inline-кнопки со stateful callback-маршрутами, так что пользователи могут листать результаты внутри одной Telegram-переписки.
 
@@ -269,7 +269,7 @@ messageBuilder.AppendRow($"<i>Индивидуальная настройка п
 
 ## Исходный код
 
-- **Основной репозиторий:** [github.com/win7user10/Laraue.Apps.RealEstate](https://github.com/win7user10/Laraue.Apps.RealEstate)
+- **Основной репозиторий:** [github.com/Laraue/Laraue.Apps.RealEstate](https://github.com/Laraue/Laraue.Apps.RealEstate)
 - **Библиотека краулера:** [github.com/win7user10/Laraue.Crawling](https://github.com/win7user10/Laraue.Crawling)
 - **Живое приложение:** [apartments.laraue.com](https://apartments.laraue.com)
 

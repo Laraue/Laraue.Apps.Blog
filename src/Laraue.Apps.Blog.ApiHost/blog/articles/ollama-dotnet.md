@@ -4,7 +4,7 @@ type: article
 projects: [real-estate, learn-language]
 description: How to integrate Ollama with C# and .NET — native HTTP API, structured JSON output, vision model image analysis, and a typed NuGet adapter that generates schemas from C# classes automatically. No cloud API required.
 createdAt: 2025-12-26
-updatedAt: 2026-08-05
+updatedAt: 2026-09-30
 ---
 **Integrating Ollama with C# and .NET** lets you run open-source language and vision models locally — no cloud API keys, no per-call costs, no data leaving your server. This article covers the native Ollama HTTP API, structured output with JSON Schema, vision model image analysis, and a typed .NET adapter library that generates request schemas automatically from C# classes.
 
@@ -242,7 +242,7 @@ var result = await ollamaPredictor.PredictAsync<PredictionResult>(
 
 ## Real-World Usage
 
-The [real estate aggregator](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Prediction.AppServices/OllamaRealEstatePredictor.cs) uses `IOllamaPredictor` with `qwen2.5vl` to score apartment photos for renovation quality. Every listing photo gets a `RenovationRating` between 0 and 1, plus arrays of `Advantages` and `Problems` tags that are stored for prompt debugging. The per-listing average across all photos feeds into the final ideality ranking. [How the ranking formula works](../projects/real-estate).
+The [real estate aggregator](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Prediction.AppServices/OllamaRealEstatePredictor.cs) uses `IOllamaPredictor` with `qwen2.5vl` to score apartment photos for renovation quality. Every listing photo gets a `RenovationRating` between 0 and 1, plus arrays of `Advantages` and `Problems` tags that are stored for prompt debugging. The per-listing average across all photos feeds into the final ideality ranking. [How the ranking formula works](../projects/real-estate).
 
 ---
 

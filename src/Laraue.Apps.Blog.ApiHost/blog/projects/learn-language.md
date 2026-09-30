@@ -4,7 +4,7 @@ description: Build real English vocabulary with a free Telegram quiz bot. No ins
 tags: [language-learning, vocabulary, telegram-bot, english, cefr, quiz]
 type: project
 createdAt: 2025-11-01
-updatedAt: 2026-06-10
+updatedAt: 2026-09-30
 ---
 Want a **free Telegram language learning bot** that actually works — with no app to install, no account to create, and no credit card? **Vocabulary Bot** (`@learn_lang_bot`) lets you build real English vocabulary in minutes a day, directly inside Telegram. It covers 7 language pairs, CEFR levels A1 through C1, and is completely free to use, forever.
 
@@ -78,7 +78,7 @@ The bot currently supports **7 English-based language pairs**:
 | Chinese | English |
 | Spanish | English |
 
-More pairs are in development. The project is **open source** (MIT license), so community contributions — including new language pairs — are welcome via the [GitHub repository](https://github.com/win7user10/Laraue.Apps.LearnLanguage).
+More pairs are in development. The project is **open source** (MIT license), so community contributions — including new language pairs — are welcome via the [GitHub repository](https://github.com/Laraue/Laraue.Apps.LearnLanguage).
 
 ---
 
@@ -104,7 +104,7 @@ Duolingo focuses on gamified, sentence-based learning across many skill areas. V
 
 Vocabulary Bot is **100% free** — no premium tiers, no word limits, no advertising. The project is open source under the MIT license and actively maintained.
 
-You can contribute new words, fix translations, or add a language pair directly via [GitHub](https://github.com/win7user10/Laraue.Apps.LearnLanguage).
+You can contribute new words, fix translations, or add a language pair directly via [GitHub](https://github.com/Laraue/Laraue.Apps.LearnLanguage).
 
 ---
 

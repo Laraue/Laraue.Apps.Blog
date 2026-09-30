@@ -4,7 +4,7 @@ type: article
 projects: [real-estate, learn-language]
 description: Как использовать Ollama в C# и .NET — нативный HTTP API, структурированный JSON-вывод через C# классы, анализ изображений vision-моделями и типизированный NuGet-адаптер. Без облачных API, без утечки данных.
 createdAt: 2025-12-26
-updatedAt: 2026-08-05
+updatedAt: 2026-09-30
 ---
 **Интеграция Ollama с C# и .NET** позволяет запускать open-source языковые и vision-модели локально — без облачных API-ключей, без оплаты за каждый вызов, без передачи данных на внешние серверы. В этой статье разбирается нативный HTTP API Ollama, структурированный вывод через JSON Schema, анализ изображений vision-моделями и типизированный .NET-адаптер, который генерирует схемы запросов из C# классов автоматически.
 
@@ -242,7 +242,7 @@ var result = await ollamaPredictor.PredictAsync<PredictionResult>(
 
 ## Применение в реальных проектах
 
-[Агрегатор недвижимости](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Prediction.AppServices/OllamaRealEstatePredictor.cs) использует `IOllamaPredictor` с `qwen2.5vl` для оценки фотографий квартир по качеству ремонта. Каждое фото получает `RenovationRating` от 0 до 1, а также массивы `Advantages` и `Problems`, которые хранятся для отладки промптов. Среднее по всем фото объявления входит в итоговый рейтинг идеальности. [Как работает формула ранжирования](../projects/real-estate).
+[Агрегатор недвижимости](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Prediction.AppServices/OllamaRealEstatePredictor.cs) использует `IOllamaPredictor` с `qwen2.5vl` для оценки фотографий квартир по качеству ремонта. Каждое фото получает `RenovationRating` от 0 до 1, а также массивы `Advantages` и `Problems`, которые хранятся для отладки промптов. Среднее по всем фото объявления входит в итоговый рейтинг идеальности. [Как работает формула ранжирования](../projects/real-estate).
 
 ---
 

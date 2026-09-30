@@ -3,7 +3,7 @@ title: Saving media from a Telegram bot — store the preview, stream the origin
 description: Part 11 of building a Telegram task tracker solo. Teaching the capture bot to handle photos and video, and the storage decision behind it — keep small previews on disk, stream full files straight from Telegram on demand without buffering them in memory, using nginx range-request passthrough, instead of re-hosting everything.
 type: article
 createdAt: 2026-06-26 09:00
-updatedAt: 2026-06-28
+updatedAt: 2026-09-30
 projects: [boards]
 tags: [dotnet, aspnet-core, telegram-bot, file-storage, nginx, streaming, devlog]
 previousLink: telegram-saved-messages-bot-lesson
@@ -21,7 +21,7 @@ Saving an image has to work the same way as saving a text message did in the pre
 
 ## Mapping Telegram messages into service DTOs
 
-Handling media starts where the processing of all the bot's other messages starts — in [`HandleAllMessagesMiddleware`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs), introduced back in the [first backend iteration](clean-dotnet-telegram-bot-architecture). It now gains a new job — converting any Telegram update, including audio and video, into the set of change-requests the app accepts:
+Handling media starts where the processing of all the bot's other messages starts — in [`HandleAllMessagesMiddleware`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs), introduced back in the [first backend iteration](clean-dotnet-telegram-bot-architecture). It now gains a new job — converting any Telegram update, including audio and video, into the set of change-requests the app accepts:
 
 ```csharp
 SaveMessageTelegramRequest? request = message.Type switch
@@ -52,7 +52,7 @@ This is where the crash described at the start gets fixed. We do it not by handl
 
 There is an architectural decision here: **the app defines its own set of media types and maps Telegram updates into them, rather than trying to mirror Telegram's contracts.** Telegram has separate update types for video and *animation* (GIF) — different messages with different fields. For the app that distinction is redundant: we treat animation the same as video. So both `GetAnimationRequest` and `GetVideoRequest` map into the same `SaveVideoMessageTelegramRequest`. The mapping layer is where Telegram's many message types get mapped into the ones the app defines. Because of it, at the service level we think about a GIF and an MP4 not as separate types but as one common thing — a video file. Defining your own contracts, instead of letting an external API's contracts spread through the whole system, is an important habit of an experienced developer. It draws a clear line between integration and service contracts, and keeps the number of changes to a minimum when those external contracts change.
 
-The middleware passes the mapped request to `HandleSaveMessage` of the [Telegram request handling service](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramMessageService.cs). That service saves the received object through a `Save` call to a separate [Telegram request saving service](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs), and signals the result by setting a 👍 reaction on the received message. That reaction is the confirmation of saving — no text replies, no long dialogs, no buttons. Splitting handling from saving separates the data layer from the Telegram integration (the data layer saves and returns the result), while the Telegram-facing layer informs the user of the result.
+The middleware passes the mapped request to `HandleSaveMessage` of the [Telegram request handling service](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramMessageService.cs). That service saves the received object through a `Save` call to a separate [Telegram request saving service](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramServices/Services/Messages/TelegramSaveMessageService.cs), and signals the result by setting a 👍 reaction on the received message. That reaction is the confirmation of saving — no text replies, no long dialogs, no buttons. Splitting handling from saving separates the data layer from the Telegram integration (the data layer saves and returns the result), while the Telegram-facing layer informs the user of the result.
 
 ## The architectural decision: store a copy of the file, or a reference to it?
 
@@ -66,7 +66,7 @@ In the save service we even found a developer's comment that became the thesis o
 
 > We can't make constant requests to Telegram — opening a board with a lot of media will hit the limits. And we can't always store files — they take up too much space.
 
-So our architecture ended up somewhere between the two approaches: **download small previews, store references to the originals.** Here is how it works: when an image is saved, Telegram provides links to several files in different resolutions. We save two [`TelegramFile`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramFile.cs) rows — a reference to the full-size file and one to the thumbnail. When saving the thumbnail reference, the file is downloaded into local storage. For video the situation is similar: Telegram sends links to its thumbnail and to the object itself, which we save by the same logic as for a photo.
+So our architecture ended up somewhere between the two approaches: **download small previews, store references to the originals.** Here is how it works: when an image is saved, Telegram provides links to several files in different resolutions. We save two [`TelegramFile`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramFile.cs) rows — a reference to the full-size file and one to the thumbnail. When saving the thumbnail reference, the file is downloaded into local storage. For video the situation is similar: Telegram sends links to its thumbnail and to the object itself, which we save by the same logic as for a photo.
 
 The save implementation is in the `GetOrCreateMessageFileId` method:
 
@@ -119,7 +119,7 @@ private async Task<Guid> GetOrCreateMessageFileId(
 }
 ```
 
-Writing to and reading from local storage goes through the [`IFileStorage`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.Services/FileStorage.cs) abstraction, whose options — `FileStorageOptions` — have a single property: the root directory to write files into:
+Writing to and reading from local storage goes through the [`IFileStorage`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.Services/FileStorage.cs) abstraction, whose options — `FileStorageOptions` — have a single property: the root directory to write files into:
 
 ```csharp
 public interface IFileStorage
@@ -141,7 +141,7 @@ public class FileStorageOptions
 
 The implementation is a thin wrapper over the local disk: a file's local path is combined with `FilesDirectory` to get its physical location, `WriteFile` creates the directory if needed and copies the incoming stream to a file (via `CopyToAsync`, to avoid full buffering), and `ReadFile` opens the file as a stream. It is a simple interface, not tied to local disk. If we ever move to object storage like S3, only this class changes. For now the files will be stored in the cheapest storage we have — the filesystem of a rented VPS.
 
-The model used to store references to Telegram files — [`TelegramFile`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramFile.cs) — is worth a separate look:
+The model used to store references to Telegram files — [`TelegramFile`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramFile.cs) — is worth a separate look:
 
 ```csharp
 public class TelegramFile
@@ -195,9 +195,9 @@ public enum MediaType
 }
 ```
 
-Each `MediaInfo` object holds two references — `PreviewFileId` and `OriginalFileId`, both pointing at `TelegramFile` rows by their `Guid`. The frontend uses the preview reference to show the thumbnail on the board, with code like `<img :src = BackendHost + '/api/telegram-files/' + PreviewFileId>` (the backend returns a stream of the file from local disk in the [`GetFileById`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramFilesController.cs) method). If the user clicks a preview, the backend returns a stream of the original file fetched through the Telegram API, and the frontend renders it (or plays it, for video) in the media-viewer component.
+Each `MediaInfo` object holds two references — `PreviewFileId` and `OriginalFileId`, both pointing at `TelegramFile` rows by their `Guid`. The frontend uses the preview reference to show the thumbnail on the board, with code like `<img :src = BackendHost + '/api/telegram-files/' + PreviewFileId>` (the backend returns a stream of the file from local disk in the [`GetFileById`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramFilesController.cs) method). If the user clicks a preview, the backend returns a stream of the original file fetched through the Telegram API, and the frontend renders it (or plays it, for video) in the media-viewer component.
 
-Note that the `Media` list on `IssueListDto` is not requested directly from the database — it is *enriched* with media after the issues themselves are fetched from the DB. This is a deliberate architectural choice. Pseudocode of the enrichment from the [original](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiServices/IssuesService.cs) file:
+Note that the `Media` list on `IssueListDto` is not requested directly from the database — it is *enriched* with media after the issues themselves are fetched from the DB. This is a deliberate architectural choice. Pseudocode of the enrichment from the [original](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiServices/IssuesService.cs) file:
 
 ```csharp
 var issues = await GetIssues(request);
@@ -206,7 +206,7 @@ await EnrichMedia(issues);
 
 This approach cuts down the number of joins in the issues query by loading file information in a separate method. The whole backend runs on the principle "several simple queries are better than one complex one" — because it scales much more easily and cheaply than the database does.
 
-**Opening the original of an item** happens when a photo or video preview is clicked. As with the thumbnails, the frontend requests the backend's [`GetFileById`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramFilesController.cs) method, passing `OriginalFileId`, and gets back a stream with the file. For the original file, though, the file is not found on disk and is requested from Telegram.
+**Opening the original of an item** happens when a photo or video preview is clicked. As with the thumbnails, the frontend requests the backend's [`GetFileById`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramFilesController.cs) method, passing `OriginalFileId`, and gets back a stream with the file. For the original file, though, the file is not found on disk and is requested from Telegram.
 
 Here it is worth mentioning the limits of the Bot API methods `GetFile`/`DownloadFile` used above to *save* thumbnails. `DownloadFile` can download files no larger than 20 MB. To avoid hitting this limit with large files, the controller serves the file content through Telegram's **direct file URL** — `https://api.telegram.org/file/bot{botToken}/{filePath}`. This URL points at an address in Telegram's file storage and has no such limit.
 
@@ -238,7 +238,7 @@ location ^~ /api/notes-board/telegram-files {
 
 The important lines are the ones that turn nginx from a buffering proxy into a pass-through pipe. `proxy_buffering off` tells nginx not to accumulate the upstream response before forwarding it — bytes are passed along as they arrive, so neither nginx nor the backend ever holds the whole file. The `Range` and `If-Range` headers are forwarded upstream, and `Content-Range` and `Accept-Ranges` are passed back, which is what makes **range requests** work: a video player can ask for just the slice of the file it needs to start playing, and seek to the middle without downloading everything before it. That is why a saved video can begin playing almost immediately and scrub smoothly, rather than downloading in full first. The long `proxy_read_timeout` and `proxy_send_timeout` keep slow, large transfers from being cut off mid-stream, and `gzip off` avoids wasting effort trying to compress already-compressed media.
 
-nginx can only pass those range headers through because the backend produces them in the first place. The [`TelegramFilesController`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramFilesController.cs) does not implement range logic itself — it forwards the browser's `Range` header to Telegram and then relays Telegram's response back faithfully, including the status code and the headers that describe the byte range:
+nginx can only pass those range headers through because the backend produces them in the first place. The [`TelegramFilesController`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramFilesController.cs) does not implement range logic itself — it forwards the browser's `Range` header to Telegram and then relays Telegram's response back faithfully, including the status code and the headers that describe the byte range:
 
 ```csharp
 Response.StatusCode = (int)telegramResponse.StatusCode;
@@ -265,11 +265,11 @@ The result: a large original streams through the whole chain — Telegram, backe
 
 ## How the frontend uses the preview and original references to display media
 
-The frontend works the same way with both `previewFileId` and `originalFileId`. To it they are file identifiers — given them, it can build links for direct access. For that the frontend uses [`getImageUrl(guid)`](https://github.com/win7user10/laraue-boards/blob/master/app/composables/utils.ts), which returns a download link for the file through [`TelegramFilesController`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramFilesController.cs). The frontend has no idea whether the file is on the server or will be loaded from Telegram; it requests the file by its `Guid`, and the rest is the backend's concern.
+The frontend works the same way with both `previewFileId` and `originalFileId`. To it they are file identifiers — given them, it can build links for direct access. For that the frontend uses [`getImageUrl(guid)`](https://github.com/Laraue/laraue-boards/blob/master/app/composables/utils.ts), which returns a download link for the file through [`TelegramFilesController`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramFilesController.cs). The frontend has no idea whether the file is on the server or will be loaded from Telegram; it requests the file by its `Guid`, and the rest is the backend's concern.
 
-A card on the board uses only previews. The [`LnbCard`](https://github.com/win7user10/laraue-boards/blob/master/app/components/LnbCard.vue) component renders each issue's media as a set of thumbnails, capping the count at 4 and adding "+N" if there are more. Each thumbnail's `src` is rendered as `getImageUrl(mediaInfo.previewFileId)`. If the media type is video, the preview gets a play-icon overlay. As a result, rendering a board full of media cards makes not a single request to Telegram, because all the thumbnails are stored locally.
+A card on the board uses only previews. The [`LnbCard`](https://github.com/Laraue/laraue-boards/blob/master/app/components/LnbCard.vue) component renders each issue's media as a set of thumbnails, capping the count at 4 and adding "+N" if there are more. Each thumbnail's `src` is rendered as `getImageUrl(mediaInfo.previewFileId)`. If the media type is video, the preview gets a play-icon overlay. As a result, rendering a board full of media cards makes not a single request to Telegram, because all the thumbnails are stored locally.
 
-Clicking a thumbnail calls into shared state through `openMedia(media, index)`. This method saves the media list and the index of the opened item into the state, and [`LnbMediaViewer`](https://github.com/win7user10/laraue-boards/blob/master/app/pages/organizations/%5BorgKey%5D.vue) renders the opened item. To load the original, `originalFileId` is used: the image and video elements request it through `src`. The video element uses a few extra attributes: `controls`, `playsinline`, `poster` with `previewFileId` — to show the thumbnail while the video loads — and `preload="metadata"`, which makes the browser download only what is needed to start playback. Starting playback of the `<video>` element kicks off the streaming process described earlier.
+Clicking a thumbnail calls into shared state through `openMedia(media, index)`. This method saves the media list and the index of the opened item into the state, and [`LnbMediaViewer`](https://github.com/Laraue/laraue-boards/blob/master/app/pages/organizations/%5BorgKey%5D.vue) renders the opened item. To load the original, `originalFileId` is used: the image and video elements request it through `src`. The video element uses a few extra attributes: `controls`, `playsinline`, `poster` with `previewFileId` — to show the thumbnail while the video loads — and `preload="metadata"`, which makes the browser download only what is needed to start playback. Starting playback of the `<video>` element kicks off the streaming process described earlier.
 
 ## Working with local storage files from the application containers
 

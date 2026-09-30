@@ -2,12 +2,12 @@
 title: Поиск квартир в Санкт-Петербурге с ИИ-оценкой фото — лучшие объявления первыми
 type: project
 projectType: application
-githubLink: https://github.com/win7user10/Laraue.Apps.RealEstate
+githubLink: https://github.com/Laraue/Laraue.Apps.RealEstate
 applicationLink: https://laraue.com/crawled-apartments
 tags: [real-estate, apartment-search, saint-petersburg, ai-ranking, cian-alternative, renovation-quality, telegram, notifications]
 description: Бесплатный агрегатор квартир Санкт-Петербурга с ИИ-ранжированием по качеству ремонта. Фильтры по районам СПб, цене, комнатам и ИИ-рейтингу. Уведомления в Telegram о новых подходящих объявлениях.
 createdAt: 2025-11-01
-updatedAt: 2026-06-13
+updatedAt: 2026-09-30
 ---
 Листать сотни объявлений о квартирах в Санкт-Петербурге — утомительно. Половина фото тёмные, размытые или сделаны так, чтобы скрыть проблемы. Цены дико разнятся при внешне похожих квартирах. И если вы не провели годы на рынке недвижимости СПб, почти невозможно отличить реально выгодное предложение от плохого, глядя только на страницу объявления.
 
@@ -91,7 +91,7 @@ updatedAt: 2026-06-13
 
 **[Открыть приложение на apartments.laraue.com](https://apartments.laraue.com)**
 
-Проект с открытым исходным кодом (лицензия MIT): [github.com/win7user10/Laraue.Apps.RealEstate](https://github.com/win7user10/Laraue.Apps.RealEstate). Наиболее полезный вклад — новые схемы краулера для дополнительных источников недвижимости или улучшения промпта Ollama для более точной оценки ремонта.
+Проект с открытым исходным кодом (лицензия MIT): [github.com/Laraue/Laraue.Apps.RealEstate](https://github.com/Laraue/Laraue.Apps.RealEstate). Наиболее полезный вклад — новые схемы краулера для дополнительных источников недвижимости или улучшения промпта Ollama для более точной оценки ремонта.
 
 ---
 

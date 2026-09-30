@@ -3,7 +3,7 @@ title: Clean Telegram bot architecture in .NET — controllers instead of a gian
 description: Part 5 of building a Telegram task tracker solo. A clean .NET Telegram bot with ASP.NET-style controllers and middleware instead of a giant switch, a layered solution structure, and EF Core paired with linq2db on the same models for the queries EF Core handles poorly.
 type: article
 createdAt: 2026-06-21
-updatedAt: 2026-07-05 20:00
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [dotnet, telegram, postgres, ef-core, linq2db, clean-architecture, devlog]
 previousLink: choosing-stack-for-solo-project
@@ -17,13 +17,13 @@ The goal of the first development iteration is minimal: build a backend that can
 
 ## Telegram Host
 
-At this stage we work with a single runnable project (host): [`TelegramHost`](https://github.com/win7user10/Laraue.Apps.Boards/tree/main/src/Laraue.Apps.Boards.TelegramHost). Its job is simple — connect to Telegram, pick up new updates, and put them into the database.
+At this stage we work with a single runnable project (host): [`TelegramHost`](https://github.com/Laraue/Laraue.Apps.Boards/tree/main/src/Laraue.Apps.Boards.TelegramHost). Its job is simple — connect to Telegram, pick up new updates, and put them into the database.
 
 When the whole product is already in your head, it is tempting to lay out the entire project structure upfront — web API, background workers, services for future features. We want to move sequentially. Moving messages from the chat into the database is the minimal functionality the projects can be deployed with. That is where we stop.
 
 ## Solution structure
 
-Even though we work on a single host, we try to make the solution structure as close as possible to what we want to end up with. It barely differs from project to project: the `src` folder holds all the projects, the `tests` folder holds the tests. The source code is in the [backend repository](https://github.com/win7user10/Laraue.Apps.Boards/tree/main/src); below is a breakdown of why the structure is the way it is.
+Even though we work on a single host, we try to make the solution structure as close as possible to what we want to end up with. It barely differs from project to project: the `src` folder holds all the projects, the `tests` folder holds the tests. The source code is in the [backend repository](https://github.com/Laraue/Laraue.Apps.Boards/tree/main/src); below is a breakdown of why the structure is the way it is.
 
 We create the projects by hand — adding each `.csproj` through the code editor's context menu. In large companies this process is usually automated: a service with the right structure and settings is generated from a template. But that automation pays off when new services are created every day. We have few projects, and creating them takes very little time compared to other activities.
 
@@ -91,9 +91,9 @@ public class Message
 
 The link to the Telegram message identifier is optional: the `TelegramMessageId` field is nullable. From the very first iteration the model allows a card on the board to be created without using the messenger at all.
 
-The [`User`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/User.cs) model implements `ITelegramUser<Guid>` — an interface from our [Laraue.Telegram.NET](https://github.com/win7user10/Laraue.Telegram.NET) library. The user is saved by the library automatically on the first interaction, which is why the model has to implement this interface.
+The [`User`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/User.cs) model implements `ITelegramUser<Guid>` — an interface from our [Laraue.Telegram.NET](https://github.com/Laraue/Laraue.Telegram.NET) library. The user is saved by the library automatically on the first interaction, which is why the model has to implement this interface.
 
-The [`TelegramMessage`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramMessage.cs) model holds references to a message's various Telegram identifiers. With it we try to keep Telegram-specific identifiers out of the app's main business logic.
+The [`TelegramMessage`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.DataAccess/Models/TelegramMessage.cs) model holds references to a message's various Telegram identifiers. With it we try to keep Telegram-specific identifiers out of the app's main business logic.
 
 ### Limiting the length of string columns
 
@@ -119,7 +119,7 @@ The database is where a message ends up. The more interesting part is how it get
 
 The bot is designed to handle two kinds of messages. The first is commands: the user asks for something to be done, the bot does it. The `/start` command, for example. The second is all the other messages: if the user typed something and it is not a command, the message is simply saved to the database, to show up on the board later.
 
-Commands are routed to controllers, ASP.NET-style, with our [Laraue.Telegram.NET](https://github.com/win7user10/Laraue.Telegram.NET) library. The `/start` command, for example, looks like this:
+Commands are routed to controllers, ASP.NET-style, with our [Laraue.Telegram.NET](https://github.com/Laraue/Laraue.Telegram.NET) library. The `/start` command, for example, looks like this:
 
 ```csharp
 public class CommandsController(ITelegramCommandsService commandsService)
@@ -139,7 +139,7 @@ public class CommandsController(ITelegramCommandsService commandsService)
 
 In .NET bots this pattern is almost never used; we made this library ourselves. Most C# Telegram bot examples look like a single method handling all the messages with a big set of switches. That works in small bots but becomes hard to maintain in large ones. So we decided to take the MVC architecture and carry it over into this library.
 
-When the user sent something that is not a command, none of the routes will match, and the message is handled by [`HandleAllMessagesMiddleware`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs), working as a fallback. It is not ASP.NET middleware; it is added to the container with `AddTelegramMiddleware<HandleAllMessagesMiddleware>()` — an extension method from [Laraue.Telegram.NET](https://github.com/win7user10/Laraue.Telegram.NET).
+When the user sent something that is not a command, none of the routes will match, and the message is handled by [`HandleAllMessagesMiddleware`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/HandleAllMessagesMiddleware.cs), working as a fallback. It is not ASP.NET middleware; it is added to the container with `AddTelegramMiddleware<HandleAllMessagesMiddleware>()` — an extension method from [Laraue.Telegram.NET](https://github.com/Laraue/Laraue.Telegram.NET).
 
 ```csharp
 if (context.GetExecutedRoute() is null && AllowedUpdates.Contains(context.Update.Type))
@@ -168,7 +168,7 @@ The full path of an update looks like this:
 
 ## Configuring the Telegram host
 
-The host is set up and configured in [`Program.cs`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/Program.cs):
+The host is set up and configured in [`Program.cs`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.TelegramHost/Program.cs):
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -219,7 +219,7 @@ The reason is convenient history navigation. A project that lives for years accu
 
 ### Combining EF Core and linq2db in one project
 
-The project uses EF Core as the default ORM for queries. But some cases are not supported by that framework, and that is where linq2db helps. Both ORMs work with the same models — the registration is the `app.Services.UseLinq2Db()` line. `UseLinq2Db()` is just our [wrapper](https://github.com/win7user10/Laraue.Core/blob/master/src/Laraue.Core.DataAccess.Linq2DB/Extensions/ServiceCollectionExtensions.cs) for working with the official [`LinqToDB.EntityFrameworkCore`](https://github.com/linq2db/linq2db/tree/master/Source/LinqToDB.EntityFrameworkCore) adapter.
+The project uses EF Core as the default ORM for queries. But some cases are not supported by that framework, and that is where linq2db helps. Both ORMs work with the same models — the registration is the `app.Services.UseLinq2Db()` line. `UseLinq2Db()` is just our [wrapper](https://github.com/Laraue/Laraue.Core/blob/master/src/Laraue.Core.DataAccess.Linq2DB/Extensions/ServiceCollectionExtensions.cs) for working with the official [`LinqToDB.EntityFrameworkCore`](https://github.com/linq2db/linq2db/tree/master/Source/LinqToDB.EntityFrameworkCore) adapter.
 
 Why not use linq2db all the time? Two reasons. First: there are cases EF Core handles that linq2db does not. Second: EF Core has very convenient change tracking and migrations tooling, which linq2db lacks.
 

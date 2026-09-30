@@ -5,7 +5,7 @@ githubLink: https://github.com/win7user10/Laraue.PdfQL
 tags: [csharp, dotnet, interpreter, query-language, lexer, parser, ast, transpiler, dsl, mongodb, pdf-extraction]
 description: Разбор архитектуры интерпретатора языка запросов на C# — лексер, парсер, AST и конвейерный исполнитель — на примере открытого проекта PdfQL. Практическое руководство для .NET разработчиков.
 createdAt: 2025-03-04
-updatedAt: 2026-06-12
+updatedAt: 2026-09-30
 ---
 Написать **интерпретатор языка запросов на C#** — задача, которая пугает до тех пор, пока не разбить её на части. В этой статье разобрана архитектура и ключевые решения [PdfQL](https://github.com/win7user10/Laraue.PdfQL) — открытой C# библиотеки, реализующей конвейерный язык запросов для извлечения структурированных данных из PDF-документов.
 
@@ -21,7 +21,7 @@ PdfQL — концептуальный проект, не production-библи�
 | NuGet        | ![последняя версия](https://img.shields.io/nuget/v/Laraue.PdfQL)     |
 | Загрузки     | ![загрузки](https://img.shields.io/nuget/dt/Laraue.PdfQL)            |
 | GitHub       | [Laraue.PdfQL](https://github.com/win7user10/Laraue.PdfQL)           |
-| Демо-приложение | [Laraue.Apps.PdfQL](https://github.com/win7user10/Laraue.Apps.PdfQL) |
+| Демо-приложение | [Laraue.Apps.PdfQL](https://github.com/Laraue/Laraue.Apps.PdfQL) |
 | Живое демо   | [PDF Extractor](https://laraue.com/ru/pdf-extractor)                 |
 
 ---
@@ -207,7 +207,7 @@ public class AnonymousTypeRegistry
 
 Живое демо на [laraue.com/pdf-extractor](https://laraue.com/pdf-extractor) позволяет тестировать PdfQL-запросы прямо в браузере — загрузите PDF, напишите запрос и получите JSON-вывод. Готовые пресеты (извлечь все таблицы, извлечь все изображения) компилируются в PdfQL внутри.
 
-Веб-API, лежащий в основе демо, находится в отдельном репозитории: [github.com/win7user10/Laraue.Apps.PdfQL](https://github.com/win7user10/Laraue.Apps.PdfQL). Это тонкая ASP.NET Core обёртка над библиотекой — полезная как референс для хостинга PdfQL в веб-контексте.
+Веб-API, лежащий в основе демо, находится в отдельном репозитории: [github.com/Laraue/Laraue.Apps.PdfQL](https://github.com/Laraue/Laraue.Apps.PdfQL). Это тонкая ASP.NET Core обёртка над библиотекой — полезная как референс для хостинга PdfQL в веб-контексте.
 
 ---
 
