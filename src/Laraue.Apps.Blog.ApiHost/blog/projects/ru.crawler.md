@@ -4,7 +4,7 @@ type: project
 tags: [csharp, dotnet, web-scraping, crawler, anglesharp, puppeteersharp, html-parsing]
 description: Laraue.Crawling — библиотека для веб-скрапинга на C#, поддерживающая статический HTML, JavaScript-рендеринг и XML. Опишите схему парсинга как типизированный C# код — без разбросанных селекторов и сложной поддержки.
 createdAt: 2025-03-04
-updatedAt: 2026-06-10
+updatedAt: 2026-09-30
 ---
 Большинство решений для парсинга сайтов на C# работают — до первого изменения структуры сайта.
 Один сломанный селектор, и вы снова разбираетесь в коде, который писали полгода назад.
@@ -172,12 +172,12 @@ headless Chromium, поэтому обрабатывает ленивую заг
 
 ## Использование в реальных проектах
 
-Laraue.Crawling работает в продакшне в составе проекта [SPB Real Estate](https://github.com/win7user10/Laraue.Apps.RealEstate) —
+Laraue.Crawling работает в продакшне в составе проекта [SPB Real Estate](https://github.com/Laraue/Laraue.Apps.RealEstate) —
 сервиса мониторинга объявлений о недвижимости, который регулярно обходит два крупнейших
 российских сайта с объявлениями:
-[Avito](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.Impl/Avito/AvitoCrawlingSchema.cs)
+[Avito](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.Impl/Avito/AvitoCrawlingSchema.cs)
 и
-[Cian](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.Impl/Cian/CianCrawlingSchema.cs),
+[Cian](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.Impl/Cian/CianCrawlingSchema.cs),
 извлекая объявления как планируемые задачи.
 
 ---

@@ -3,7 +3,7 @@ title: Telegram Login Widget vs Mini App auth in .NET — two validation schemes
 description: Part 13 of building a Telegram task tracker solo. Users asked for a web version outside Telegram, so it needed its own login. Adding the Telegram Login Widget meant a second validation scheme alongside the Mini App's — and both end at the same JWT, because the app barely depends on Telegram past login.
 type: article
 createdAt: 2026-07-01
-updatedAt: 2026-07-01
+updatedAt: 2026-09-30
 projects: [boards]
 tags: [dotnet, aspnet-core, telegram, authentication, telegram-login-widget, jwt, devlog]
 previousLink: telegram-media-group-album-bot
@@ -22,7 +22,7 @@ That is what makes adding a new authentication provider simple. It just has to v
 
 ## How web-version auth differs from Telegram Mini App auth
 
-A browser opened outside Telegram has no init data object, which the Mini App has. The standard way to authenticate through Telegram on a web page is the [Telegram Login Widget](https://core.telegram.org/widgets/login) — a script that adds a "Log in with Telegram" button and returns a user object once the user authorises. The [source](https://github.com/win7user10/laraue-boards/blob/master/app/pages/index.vue) shows how such a callback is handled:
+A browser opened outside Telegram has no init data object, which the Mini App has. The standard way to authenticate through Telegram on a web page is the [Telegram Login Widget](https://core.telegram.org/widgets/login) — a script that adds a "Log in with Telegram" button and returns a user object once the user authorises. The [source](https://github.com/Laraue/laraue-boards/blob/master/app/pages/index.vue) shows how such a callback is handled:
 
 ```ts
 (window as any).onTelegramAuth = async (user: any) => {
@@ -32,9 +32,9 @@ A browser opened outside Telegram has no init data object, which the Mini App ha
 };
 ```
 
-When the user authorises through Telegram's standard authorization window, the widget calls `onTelegramAuth` with the signed data, the frontend posts it to the backend, and gets back a bearer token — after which [`initUserWithBearer`](https://github.com/win7user10/laraue-boards/blob/master/app/composables/auth.ts) puts the app in exactly the state a Mini App login would.
+When the user authorises through Telegram's standard authorization window, the widget calls `onTelegramAuth` with the signed data, the frontend posts it to the backend, and gets back a bearer token — after which [`initUserWithBearer`](https://github.com/Laraue/laraue-boards/blob/master/app/composables/auth.ts) puts the app in exactly the state a Mini App login would.
 
-On the backend, widget authorization gets its own endpoint in [`TelegramAuthController`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramAuthController.cs):
+On the backend, widget authorization gets its own endpoint in [`TelegramAuthController`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramAuthController.cs):
 
 ```csharp
 [HttpPost("auth")]
@@ -48,7 +48,7 @@ public Task<string> Authenticate(
 
 The reason this is not the same method used before is that widget data is validated differently from the Mini App's init data. On top of that, init data is a URL-encoded string containing the user object, while the widget sends a plain object to the backend — so the contracts of the two auth methods differ too.
 
-The job of the auth method is to confirm the data came from Telegram, but the signature-checking scheme differs here. This is the web version's variant — [`ValidateWidgetData`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/TelegramAuthService.cs):
+The job of the auth method is to confirm the data came from Telegram, but the signature-checking scheme differs here. This is the web version's variant — [`ValidateWidgetData`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/TelegramAuthService.cs):
 
 ```csharp
 private MiniAppUser ValidateWidgetData(TelegramWidgetAuthRequest request)

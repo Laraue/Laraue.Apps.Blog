@@ -3,10 +3,10 @@ title: Telegram-бот для изучения языков на C# и .NET 9 �
 description: Технический разбор архитектуры open-source Telegram-бота для пополнения словарного запаса: стек C# / .NET 9, пайплайн автоперевода на базе Ollama, модель данных и настройка локальной разработки.
 type: article
 createdAt: 2025-04-17
-updatedAt: 2025-04-17
+updatedAt: 2026-09-30
 projects: [learn-language]
 ---
-**[Laraue.Apps.LearnLanguage](https://github.com/win7user10/Laraue.Apps.LearnLanguage)** — open-source Telegram-бот для изучения словарного запаса на нескольких языках. В этой статье разбираем архитектуру, технические решения и детали реализации — полезно, если вы строите Telegram-бота на C#, проектируете пайплайн с AI-переводом или просто интересуетесь, как устроено production-приложение для изучения языков.
+**[Laraue.Apps.LearnLanguage](https://github.com/Laraue/Laraue.Apps.LearnLanguage)** — open-source Telegram-бот для изучения словарного запаса на нескольких языках. В этой статье разбираем архитектуру, технические решения и детали реализации — полезно, если вы строите Telegram-бота на C#, проектируете пайплайн с AI-переводом или просто интересуетесь, как устроено production-приложение для изучения языков.
 
 Задеплоенный бот — [@learn_lang_bot](https://t.me/learn_lang_bot).
 
@@ -214,6 +214,6 @@ cd src && dotnet ef migrations add MigrationName \
 
 Проект распространяется под лицензией MIT и открыт для контрибьюций. Самый простой вклад — редактирование `translations.json` для добавления недостающих переводов или исправления существующих: знание C# не требуется. Для фичей архитектура чистая и хорошо изолированная, так что добавить новую команду бота или расширить движок квиза несложно.
 
-- **Репозиторий:** [github.com/win7user10/Laraue.Apps.LearnLanguage](https://github.com/win7user10/Laraue.Apps.LearnLanguage)
+- **Репозиторий:** [github.com/Laraue/Laraue.Apps.LearnLanguage](https://github.com/Laraue/Laraue.Apps.LearnLanguage)
 - **Бот:** [@learn_lang_bot](https://t.me/learn_lang_bot)
 - **Сайт:** [laraue.com/learn-language-bot](https://laraue.com/learn-language-bot)

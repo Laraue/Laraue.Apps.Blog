@@ -5,7 +5,7 @@ githubLink: https://github.com/win7user10/Laraue.PdfQL
 tags: [csharp, dotnet, interpreter, query-language, lexer, parser, ast, transpiler, dsl, mongodb, pdf-extraction]
 description: A step-by-step walkthrough of building a query language interpreter in C# — lexer, parser, AST, and pipeline executor — using PdfQL as a real worked example. Open source.
 createdAt: 2025-11-01
-updatedAt: 2026-06-12
+updatedAt: 2026-09-30
 ---
 
 Building a **query language interpreter in C#** is one of those projects that sounds intimidating until you break it into parts. This article walks through the architecture and key decisions behind [PdfQL](https://github.com/win7user10/Laraue.PdfQL) — an open source C# library that implements a pipeline-style query language for extracting structured data from PDF documents.
@@ -22,7 +22,7 @@ PdfQL is a concept project, not a production library. But the implementation con
 | NuGet        | ![latest version](https://img.shields.io/nuget/v/Laraue.PdfQL)  |
 | Downloads    | ![downloads](https://img.shields.io/nuget/dt/Laraue.PdfQL)      |
 | GitHub       | [Laraue.PdfQL](https://github.com/win7user10/Laraue.PdfQL)       |
-| Demo app     | [Laraue.Apps.PdfQL](https://github.com/win7user10/Laraue.Apps.PdfQL) |
+| Demo app     | [Laraue.Apps.PdfQL](https://github.com/Laraue/Laraue.Apps.PdfQL) |
 | Live demo    | [PDF Extractor](https://laraue.com/pdf-extractor)                |
 
 ---
@@ -208,7 +208,7 @@ This pattern — generating types at runtime and caching them by structural equa
 
 The live demo at [laraue.com/pdf-extractor](https://laraue.com/pdf-extractor) lets you test PdfQL queries in the browser — upload a PDF, write a query, and see JSON output. Preset options (extract all tables, extract all images) compile to PdfQL internally.
 
-The web API that backs the demo is in a separate repository: [github.com/win7user10/Laraue.Apps.PdfQL](https://github.com/win7user10/Laraue.Apps.PdfQL). It's a thin ASP.NET Core wrapper around the library — useful as a reference for how to host PdfQL in a web context.
+The web API that backs the demo is in a separate repository: [github.com/Laraue/Laraue.Apps.PdfQL](https://github.com/Laraue/Laraue.Apps.PdfQL). It's a thin ASP.NET Core wrapper around the library — useful as a reference for how to host PdfQL in a web context.
 
 ---
 

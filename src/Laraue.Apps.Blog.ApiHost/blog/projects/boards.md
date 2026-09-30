@@ -4,7 +4,7 @@ type: project
 tags: [telegram, task-tracker, kanban, project-management, open-source, saved-messages, jira-alternative, trello-alternative, asana-alternative, clickup-alternative, monday-alternative, linear-alternative]
 description: An open source task tracker that turns Telegram messages into cards on a kanban board. Send a message to the bot, get a card you can work with in the web app or the Mini App. Free, and the code is open.
 createdAt: 2026-04-16
-updatedAt: 2026-09-29
+updatedAt: 2026-09-30
 ---
 
 Telegram users often use the messenger as a place to keep thoughts, links, and photos — in Saved Messages or in separate chats. The problem is organising them afterwards. A message can be tagged, which helps with search and filtering in simple cases, but the more chats and messages there are, the harder it gets to tell what is still relevant and to find your way between them.
@@ -49,8 +49,8 @@ Laraue Boards can be opened inside Telegram as a Mini App, with no extra authori
 
 The backend and frontend repositories are open to study:
 
-- [Laraue.Apps.Boards](https://github.com/win7user10/Laraue.Apps.Boards) — .NET 10 / C#, PostgreSQL 18
-- [laraue-boards](https://github.com/win7user10/laraue-boards) — Nuxt 4, Vue 3, TypeScript
+- [Laraue.Apps.Boards](https://github.com/Laraue/Laraue.Apps.Boards) — .NET 10 / C#, PostgreSQL 18
+- [laraue-boards](https://github.com/Laraue/laraue-boards) — Nuxt 4, Vue 3, TypeScript
 
 Users wrote to us that the app interested them, but that they were not ready to trust sensitive information to a product they did not know. That is a fair point, so we decided to keep the code open — you can always check what happens to a message after it is sent.
 
@@ -136,7 +136,7 @@ We are also planning to let people sign in with a Google account. This is for te
 Yes. Everything described on this page is free. Paid plans will appear later, together with the AI features; the basic functionality will stay free.
 
 **Is the project really open source?**
-Yes — both the [backend](https://github.com/win7user10/Laraue.Apps.Boards) and the [frontend](https://github.com/win7user10/laraue-boards) are open. You can find out what happens to a message after it is sent.
+Yes — both the [backend](https://github.com/Laraue/Laraue.Apps.Boards) and the [frontend](https://github.com/Laraue/laraue-boards) are open. You can find out what happens to a message after it is sent.
 
 **How is this different from plain Saved Messages?**
 Saved Messages is a great place to save something quickly, but not always a good place to find it later. Telegram offers few ways to organise notes, and Laraue Boards tries to fix that by adding a visual interface for working with your saved messages.

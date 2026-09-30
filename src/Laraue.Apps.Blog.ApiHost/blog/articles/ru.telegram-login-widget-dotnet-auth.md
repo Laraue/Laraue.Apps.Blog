@@ -3,7 +3,7 @@ title: Telegram Login Widget vs авторизация через Mini App в .N
 description: Часть 13 цикла о разработке Telegram-таск-трекера в одиночку. Пользователи просили добавить веб-версию вне Telegram Mini App, но для этого нужно было реализовать отдельную авторизацию. Добавление Telegram Login Widget не потребовало больших доработок - виджет работает через тот же JWT, что и Mini App, а само приложение почти не зависит от Telegram после выполнения авторизации.
 type: article
 createdAt: 2026-07-01
-updatedAt: 2026-07-01
+updatedAt: 2026-09-30
 projects: [boards]
 tags: [dotnet, aspnet-core, telegram, authentication, telegram-login-widget, jwt, devlog]
 previousLink: telegram-media-group-album-bot
@@ -22,7 +22,7 @@ Mini App выполняет авторизацию через init data Telegram
 
 ## Отличия авторизации в веб-версии от авторизации через Telegram Mini App
 
-У браузера, открытого вне Telegram, нет объекта init data, который есть в Mini App. Стандартный способ выполнить авторизацию через Telegram на веб-странице — [Telegram Login Widget](https://core.telegram.org/widgets/login): скрипт, который добавляет кнопку «Log in with Telegram» и возвращает объект пользователя при выполнении авторизации. [В исходниках](https://github.com/win7user10/laraue-boards/blob/master/app/pages/index.vue) можно увидеть, как обрабатывается подобный коллбэк:
+У браузера, открытого вне Telegram, нет объекта init data, который есть в Mini App. Стандартный способ выполнить авторизацию через Telegram на веб-странице — [Telegram Login Widget](https://core.telegram.org/widgets/login): скрипт, который добавляет кнопку «Log in with Telegram» и возвращает объект пользователя при выполнении авторизации. [В исходниках](https://github.com/Laraue/laraue-boards/blob/master/app/pages/index.vue) можно увидеть, как обрабатывается подобный коллбэк:
 
 ```ts
 (window as any).onTelegramAuth = async (user: any) => {
@@ -32,9 +32,9 @@ Mini App выполняет авторизацию через init data Telegram
 };
 ```
 
-Когда пользователь авторизуется через стандартное окно авторизации Telegram, виджет вызывает `onTelegramAuth` с подписанными данными, фронтенд отправляет их на бэкенд и получает bearer-токен — после чего [`initUserWithBearer`](https://github.com/win7user10/laraue-boards/blob/master/app/composables/auth.ts) приводит приложение ровно в то состояние, в которое привёл бы и логин через Mini App.
+Когда пользователь авторизуется через стандартное окно авторизации Telegram, виджет вызывает `onTelegramAuth` с подписанными данными, фронтенд отправляет их на бэкенд и получает bearer-токен — после чего [`initUserWithBearer`](https://github.com/Laraue/laraue-boards/blob/master/app/composables/auth.ts) приводит приложение ровно в то состояние, в которое привёл бы и логин через Mini App.
 
-На бэкенде для авторизации через виджет сделан отдельный эндпоинт в ([`TelegramAuthController`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramAuthController.cs)):
+На бэкенде для авторизации через виджет сделан отдельный эндпоинт в ([`TelegramAuthController`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramAuthController.cs)):
 
 ```csharp
 [HttpPost("auth")]
@@ -48,7 +48,7 @@ public Task<string> Authenticate(
 
 Причина, по которой это не тот же метод, что использовался ранее — данные виджета валидируются иначе, чем init data у Mini App. А еще init data - это Url-encoded строка с объектом пользователя, в то время как виджет отправляет на бэкенд обычный объект - то есть контракты в двух методах авторизации различаются.
 
-Задача метода авторизации - подтвердить, что данные пришли от Telegram, но схема проверки подписи здесь отличается. Вот вариант для веб-версии — [`ValidateWidgetData`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/TelegramAuthService.cs):
+Задача метода авторизации - подтвердить, что данные пришли от Telegram, но схема проверки подписи здесь отличается. Вот вариант для веб-версии — [`ValidateWidgetData`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/TelegramAuthService.cs):
 
 ```csharp
 private MiniAppUser ValidateWidgetData(TelegramWidgetAuthRequest request)

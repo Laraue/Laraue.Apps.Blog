@@ -3,7 +3,7 @@ title: Building a Jira alternative solo — why we are doing it and the reposito
 description: Part 1 of building a Telegram task tracker solo with AI. What problem we are solving, why the world needs another task tracker, and which two repositories the article series is built on.
 type: article
 createdAt: 2026-06-19 13:00
-updatedAt: 2026-09-29 11:00
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [dotnet, nuxt, telegram, task-tracker, devlog, architecture]
 nextLink: prototyping-ui-with-ai-before-code
@@ -42,8 +42,8 @@ Laraue Boards is available at [boards.laraue.com](https://boards.laraue.com). Th
 
 The two repositories the article series is built on:
 
-- **Backend** — [Laraue.Apps.Boards](https://github.com/win7user10/Laraue.Apps.Boards) — .NET 10 / C#, PostgreSQL 18
-- **Frontend** — [laraue-boards](https://github.com/win7user10/laraue-boards) — Nuxt 4, Vue 3, TypeScript
+- **Backend** — [Laraue.Apps.Boards](https://github.com/Laraue/Laraue.Apps.Boards) — .NET 10 / C#, PostgreSQL 18
+- **Frontend** — [laraue-boards](https://github.com/Laraue/laraue-boards) — Nuxt 4, Vue 3, TypeScript
 
 Further in the series, the articles link to specific files in these repositories.
 

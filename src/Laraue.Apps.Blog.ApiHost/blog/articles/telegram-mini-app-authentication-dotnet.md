@@ -3,7 +3,7 @@ title: Telegram Mini App authentication in .NET end to end — initData validati
 description: Part 8 of building a Telegram task tracker solo. The full Telegram Mini App authentication flow in a real .NET and Nuxt app — validating the initData signature on the server with HMAC-SHA256, issuing and using a JWT bearer, reading the user from HttpContext, and why CORS matters.
 type: article
 createdAt: 2026-06-24 08:00
-updatedAt: 2026-07-02 19:30
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [dotnet, aspnet-core, nuxt, telegram-mini-app, authentication, initdata, jwt, cors, devlog]
 previousLink: deploy-nuxt-telegram-mini-app-https-nginx
@@ -16,11 +16,11 @@ At the end of the previous article the Mini App prototype started opening and sh
 
 ## Backend: the Dotnet Web API Host
 
-The backend is a new host that will handle API requests coming from the Laraue Boards frontend. Its name — `WebApiHost` — matches its function. The host was already mentioned in the [backend architecture article](clean-dotnet-telegram-bot-architecture) but did not exist when that article was written. Now [`WebApiHost`](https://github.com/win7user10/Laraue.Apps.Boards/tree/main/src/Laraue.Apps.Boards.WebApiHost) is added to the repository.
+The backend is a new host that will handle API requests coming from the Laraue Boards frontend. Its name — `WebApiHost` — matches its function. The host was already mentioned in the [backend architecture article](clean-dotnet-telegram-bot-architecture) but did not exist when that article was written. Now [`WebApiHost`](https://github.com/Laraue/Laraue.Apps.Boards/tree/main/src/Laraue.Apps.Boards.WebApiHost) is added to the repository.
 
 The new backend shares common code with `TelegramHost` — the same models from `DataAccess`, the same core services from `Services`. The database, accordingly, is also shared by the two services — not quite a microservice approach, but there is no point overcomplicating the architecture at this stage. Creating an issue from the web API contains the same base logic as creating one from Telegram. What is new here is the service layer for the web API and the host itself.
 
-The host's [`Program.cs`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Program.cs) is small and mostly follows the ASP.NET Core web API template, with two additions that matter for this article: authentication and CORS.
+The host's [`Program.cs`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Program.cs) is small and mostly follows the ASP.NET Core web API template, with two additions that matter for this article: authentication and CORS.
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -78,15 +78,15 @@ New here are a couple of lines: `AddAuthentication()` / `UseAuthentication()` an
 
 ### Splitting services into core and host-specific
 
-`AddApplicationServices` is not a method shared by all hosts — the web API has [its own `AddApplicationServices`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/WebApplicationBuilderExtensions.cs). The purpose of such a method is to register the host-specific services and to call the registration of the common (core) services.
+`AddApplicationServices` is not a method shared by all hosts — the web API has [its own `AddApplicationServices`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/WebApplicationBuilderExtensions.cs). The purpose of such a method is to register the host-specific services and to call the registration of the common (core) services.
 
-`ExceptionHandleMiddleware` is a custom middleware from our shared [Laraue.Core](https://github.com/win7user10/Laraue.Core) package that automatically maps the library's web exceptions to HTTP codes. If an unhandled `BadRequestException` is thrown in the code, the client gets a `400` error; a `ForbiddenException` turns into a `403`, and so on.
+`ExceptionHandleMiddleware` is a custom middleware from our shared [Laraue.Core](https://github.com/Laraue/Laraue.Core) package that automatically maps the library's web exceptions to HTTP codes. If an unhandled `BadRequestException` is thrown in the code, the client gets a `400` error; a `ForbiddenException` turns into a `403`, and so on.
 
 ## Authenticating the user by init data from the Telegram Mini App
 
 Before moving to the code, let's define the sequence of steps for a login from the Mini App:
 
-1. The app checks whether it is running inside Telegram, by making sure init data is available (the [`auth.init.ts`](https://github.com/win7user10/laraue-boards/blob/master/app/plugins/auth.init.ts) plugin from the previous article).
+1. The app checks whether it is running inside Telegram, by making sure init data is available (the [`auth.init.ts`](https://github.com/Laraue/laraue-boards/blob/master/app/plugins/auth.init.ts) plugin from the previous article).
 2. Send the init data to the web API's authentication endpoint.
 3. The backend validates the init data signature against the bot token and returns an authorization **bearer token**.
 4. The frontend saves the bearer to local storage.
@@ -98,7 +98,7 @@ After that, every backend call adds the authorization header with the bearer, an
 
 ### Steps 1–2: the frontend sends init data
 
-The trigger is the startup plugin from the previous article, [`auth.init.ts`](https://github.com/win7user10/laraue-boards/blob/master/app/plugins/auth.init.ts). It is a Nuxt plugin from the `/app/plugins` directory that runs automatically when the app loads. In the first version the plugin simply set the user object into `appState` from the available init data: `setUser(WebApp.initData)`. Now the init data is sent to the backend for validation instead.
+The trigger is the startup plugin from the previous article, [`auth.init.ts`](https://github.com/Laraue/laraue-boards/blob/master/app/plugins/auth.init.ts). It is a Nuxt plugin from the `/app/plugins` directory that runs automatically when the app loads. In the first version the plugin simply set the user object into `appState` from the available init data: `setUser(WebApp.initData)`. Now the init data is sent to the backend for validation instead.
 
 Each backend controller has a matching composable on the frontend, which defines the endpoint calls as typed functions. For example, this is `loadUser` in `userApi.ts`, calling the backend's `GET /user` method and returning a `UserDto`:
 
@@ -143,7 +143,7 @@ export const useUserAuthApi = () => {
 }
 ```
 
-So the architecture is: `userApi` knows *what* to call (the endpoints and their shapes), while `userClient`/`useUserAuthApi` know *how* to talk to the API (the base address and the bearer header). The `messagesBaseAddress` comes from the Nuxt runtime configuration in [`nuxt.config.ts`](https://github.com/win7user10/laraue-boards/blob/master/nuxt.config.ts), where it is supplied from an environment variable:
+So the architecture is: `userApi` knows *what* to call (the endpoints and their shapes), while `userClient`/`useUserAuthApi` know *how* to talk to the API (the base address and the bearer header). The `messagesBaseAddress` comes from the Nuxt runtime configuration in [`nuxt.config.ts`](https://github.com/Laraue/laraue-boards/blob/master/nuxt.config.ts), where it is supplied from an environment variable:
 
 ```ts
 runtimeConfig: {
@@ -159,7 +159,7 @@ Over to the server side. The frontend has sent it the `initData` string — an e
 
 > The init data approach only works for authorization through a Telegram Mini App. Telegram also supports logging in from a regular website through the "Log In with Telegram" widget — that is a separate mechanism, covered in the article about the [widget login](telegram-login-widget-dotnet-auth).
 
-The request arrives at [`TelegramAuthController`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramAuthController.cs), which accepts the request with init data and proxies it to the internal service:
+The request arrives at [`TelegramAuthController`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/TelegramAuthController.cs), which accepts the request with init data and proxies it to the internal service:
 
 ```csharp
 [ApiController]
@@ -176,7 +176,7 @@ public class TelegramAuthController(ITelegramAuthService authService) : Controll
 }
 ```
 
-[`TelegramAuthService`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/TelegramAuthService.cs) performs two operations: it validates the init data and issues a token for the verified user.
+[`TelegramAuthService`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/TelegramAuthService.cs) performs two operations: it validates the init data and issues a token for the verified user.
 
 ```csharp
 public Task<string> Authenticate(

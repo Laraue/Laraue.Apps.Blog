@@ -4,7 +4,7 @@ type: project
 tags: [dotnet, csharp, cms, markdown, api, headless-cms, static-site, nuget]
 description: Лёгкая .NET 10 библиотека, которая превращает Markdown файлы с frontmatter в фильтруемый REST API. Строгая типизация, без базы данных, без CMS. Open source, лицензия MIT
 createdAt: 2025-11-01
-updatedAt: 2026-06-10
+updatedAt: 2026-09-30
 ---
 Строите блог или документацию на .NET и не хотите тащить полноценную CMS? **Laraue.CmsBackend** — это лёгкая .NET 10 библиотека, которая превращает **Markdown файлы из Git-репозитория в запрашиваемый REST API** — с фильтрацией, сортировкой, поддержкой frontmatter и строго типизированными схемами контента. База данных не нужна.
 
@@ -29,7 +29,7 @@ updatedAt: 2026-06-10
 
 **Результат — третий путь:** Markdown файлы в Git, отдаваемые через типизированный .NET API с поддержкой frontmatter атрибутов.
 
-> Этот блог сам построен на Laraue.CmsBackend. Полный исходный код бэкенда открыт на GitHub: [Laraue.Apps.Blog](https://github.com/win7user10/Laraue.Apps.Blog) — рабочая референсная реализация, которую можно изучить или форкнуть.
+> Этот блог сам построен на Laraue.CmsBackend. Полный исходный код бэкенда открыт на GitHub: [Laraue.Apps.Blog](https://github.com/Laraue/Laraue.Apps.Blog) — рабочая референсная реализация, которую можно изучить или форкнуть.
 
 ---
 
@@ -93,7 +93,7 @@ CMS ускоряет выход в продакшн: берёт на себя а
 
 Каждая категория контента — посты блога, страницы документации, страницы проектов — получает собственный класс, наследующий `BaseContentType`. Свойства с `required` должны присутствовать в frontmatter Markdown файла. Если в каком-либо файле отсутствует обязательное поле, **приложение падает при запуске** — проблема проявляется сразу, а не в виде сломанной страницы в продакшне.
 
-Вот реальный тип контента `Documentation`, используемый в этом блоге ([исходник на GitHub](https://github.com/win7user10/Laraue.Apps.Blog/blob/main/src/Laraue.Apps.Blog.ApiHost/docTypes/Documentation.cs)):
+Вот реальный тип контента `Documentation`, используемый в этом блоге ([исходник на GitHub](https://github.com/Laraue/Laraue.Apps.Blog/blob/main/src/Laraue.Apps.Blog.ApiHost/docTypes/Documentation.cs)):
 
 ```csharp
 using Laraue.CmsBackend;
@@ -164,7 +164,7 @@ var cmsBackend = new CmsBackendBuilder(
 
 Вместо того чтобы возвращать сырой `Dictionary<string, object>`, определите явные DTO и передайте их как generic-параметр. Библиотека замапит в ваш DTO только поля из массива `Properties` — ничего лишнего не сериализуется и не отправляется клиенту.
 
-Вот как реальный контроллер блога ([исходник на GitHub](https://github.com/win7user10/Laraue.Apps.Blog/blob/main/src/Laraue.Apps.Blog.ApiHost/Controllers/BlogController.cs)) отдаёт список карточек и детальную страницу, каждый endpoint со своим DTO:
+Вот как реальный контроллер блога ([исходник на GitHub](https://github.com/Laraue/Laraue.Apps.Blog/blob/main/src/Laraue.Apps.Blog.ApiHost/Controllers/BlogController.cs)) отдаёт список карточек и детальную страницу, каждый endpoint со своим DTO:
 
 ```csharp
 // Лёгкий DTO для списков — только поля, нужные карточке на фронтенде
@@ -241,7 +241,7 @@ public class BlogController(ICmsBackend cmsBackend) : ControllerBase
 
 ## Реальное применение: этот блог
 
-Laraue.CmsBackend — не демо-проект. На нём работает блог, который вы сейчас читаете. Полный исходный код бэкенда доступен на [github.com/win7user10/Laraue.Apps.Blog](https://github.com/win7user10/Laraue.Apps.Blog) — со структурой папок контента, настройкой контроллеров и CI/CD. Если вы оцениваете библиотеку, это самая прямая ссылка на то, как она работает в продакшне.
+Laraue.CmsBackend — не демо-проект. На нём работает блог, который вы сейчас читаете. Полный исходный код бэкенда доступен на [github.com/Laraue/Laraue.Apps.Blog](https://github.com/Laraue/Laraue.Apps.Blog) — со структурой папок контента, настройкой контроллеров и CI/CD. Если вы оцениваете библиотеку, это самая прямая ссылка на то, как она работает в продакшне.
 
 ---
 
@@ -283,4 +283,4 @@ dotnet add package Laraue.CmsBackend
 
 **Есть ли рабочий пример для изучения?**
 
-Да — блог на [laraue.com/blog](https://laraue.com/blog) работает на Laraue.CmsBackend, полный исходный код бэкенда открыт на [github.com/win7user10/Laraue.Apps.Blog](https://github.com/win7user10/Laraue.Apps.Blog).
+Да — блог на [laraue.com/blog](https://laraue.com/blog) работает на Laraue.CmsBackend, полный исходный код бэкенда открыт на [github.com/Laraue/Laraue.Apps.Blog](https://github.com/Laraue/Laraue.Apps.Blog).

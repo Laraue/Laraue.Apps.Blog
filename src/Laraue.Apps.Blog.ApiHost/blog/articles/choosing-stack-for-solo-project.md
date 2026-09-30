@@ -3,7 +3,7 @@ title: Choosing a pet project stack for solo development — .NET, PostgreSQL, N
 description: Part 4 of building a Telegram task tracker solo. The reasons behind .NET 10, PostgreSQL 18, Nuxt 4 and Vue 3. A bit about the MongoDB-to-Postgres migration in a past project that taught us to prefer boring, stable technologies.
 type: article
 createdAt: 2026-06-20 22:35
-updatedAt: 2026-07-08 14:48
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [dotnet, nuxt, vue, postgres, mongodb, database, devlog, architecture]
 previousLink: telegram-saved-messages-to-task-tracker
@@ -53,7 +53,7 @@ For Boards, the following situations looked like the hard ones.
 
 **Access permissions.** Our people have experience implementing user permission management in a relational database, so there was no reason to expect Boards to be an exception.
 
-All the cases looked implementable on a relational database. Peeking a little ahead — the resulting models can be seen in the [DataAccess/Models folder](https://github.com/win7user10/Laraue.Apps.Boards/tree/main/src/Laraue.Apps.Boards.DataAccess/Models) of the backend repository.
+All the cases looked implementable on a relational database. Peeking a little ahead — the resulting models can be seen in the [DataAccess/Models folder](https://github.com/Laraue/Laraue.Apps.Boards/tree/main/src/Laraue.Apps.Boards.DataAccess/Models) of the backend repository.
 
 ## Frontend: Nuxt 4 and Vue 3
 

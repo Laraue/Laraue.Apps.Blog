@@ -3,7 +3,7 @@ title: When not to use a nullable foreign key — modelling the empty state as a
 description: Part 9 of building a Telegram task tracker solo. The issue layer in the web app and the database design decision at its centre — when a nullable foreign key is the wrong choice and a dedicated default row is better, using issues, epics and the backlog as the example.
 type: article
 createdAt: 2026-06-25 09:00
-updatedAt: 2026-07-03 21:00
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [database-design, dotnet, aspnet-core, postgres, vue, devlog]
 previousLink: telegram-mini-app-authentication-dotnet
@@ -112,7 +112,7 @@ We declined the premature optimization: storing the extra field would require du
 
 In the backend we try to stick to a layered architecture. The easiest way to see it is a concrete example — creating an issue.
 
-The request is received by the thin [`IssuesController`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/IssuesController.cs). All its endpoints require authorization — the controller is marked with the `[Authorize]` attribute. The job of each controller method is to enrich the request with the user's data from `HttpContext.User` and forward it to the Host-level service [`IssuesService`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiServices/IssuesService.cs):
+The request is received by the thin [`IssuesController`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiHost/Controllers/IssuesController.cs). All its endpoints require authorization — the controller is marked with the `[Authorize]` attribute. The job of each controller method is to enrich the request with the user's data from `HttpContext.User` and forward it to the Host-level service [`IssuesService`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.WebApiServices/IssuesService.cs):
 
 ```csharp
 public interface IIssuesService
@@ -131,7 +131,7 @@ public interface IIssuesService
 }
 ```
 
-The service level's job covers checking the caller's permissions, validation, opening a transaction when needed, and data mapping. The service does not perform the create/update/delete database operations itself — that is the responsibility of the Core-level service [`ICoreIssuesService`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.Services/CoreIssuesService.cs), which handles the shared change logic:
+The service level's job covers checking the caller's permissions, validation, opening a transaction when needed, and data mapping. The service does not perform the create/update/delete database operations itself — that is the responsibility of the Core-level service [`ICoreIssuesService`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.Services/CoreIssuesService.cs), which handles the shared change logic:
 
 ```csharp
 public interface ICoreIssuesService
@@ -161,7 +161,7 @@ The reason for the split: core services are used by both the web API and the tel
 
 ### Checking access permissions
 
-At the current stage access is separated quite simply — a user can read and change only the issues and epics they created. But since the possibility of an organization mode is planned for the future, we extract the methods for getting available entities into a separate [`AccessService`](https://github.com/win7user10/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.Services/AccessService.cs) class — this will cut the refactoring time later:
+At the current stage access is separated quite simply — a user can read and change only the issues and epics they created. But since the possibility of an organization mode is planned for the future, we extract the methods for getting available entities into a separate [`AccessService`](https://github.com/Laraue/Laraue.Apps.Boards/blob/main/src/Laraue.Apps.Boards.Services/AccessService.cs) class — this will cut the refactoring time later:
 
 ```csharp
 public interface IAccessService
@@ -198,23 +198,23 @@ Once the API is ready, the frontend can display real data. The visual design was
 
 In general, AI can split the mockup file into components on its own, but we mostly did it by hand: looked at the generated markup and asked the AI to make one component from a specific piece of code. A repeating `<div class="card">` is a `Card` component, a repeating column wrapper is a `Column`.
 
-The reason we did not ask it to generate all the components at once is the wish to control the process. A huge pull request cannot be reviewed attentively — it will contain mistakes we will not even notice. Extracting one component at a time keeps every step small and checkable. The result is in the [components folder](https://github.com/win7user10/laraue-boards/tree/master/app/components).
+The reason we did not ask it to generate all the components at once is the wish to control the process. A huge pull request cannot be reviewed attentively — it will contain mistakes we will not even notice. Extracting one component at a time keeps every step small and checkable. The result is in the [components folder](https://github.com/Laraue/laraue-boards/tree/master/app/components).
 
 ### Frontend API clients
 
-Each backend controller has a matching composable client on the frontend, in the same style as `userApi` from the previous article. Epics have [`epicsApi.ts`](https://github.com/win7user10/laraue-boards/blob/master/app/composables/epicsApi.ts), issues have their own.
+Each backend controller has a matching composable client on the frontend, in the same style as `userApi` from the previous article. Epics have [`epicsApi.ts`](https://github.com/Laraue/laraue-boards/blob/master/app/composables/epicsApi.ts), issues have their own.
 
 We write them ourselves. The alternative is generating the clients from an OpenAPI/Swagger document, so the frontend types stay automatically in sync with the backend. But that takes time — to make the code generate in exactly the shape we need. While the API has not grown large, we settled on the manual option.
 
 ### A few words about applyInsets: fitting the app into the Telegram frame
 
-Opening the app in the Telegram Mini App, we ran into part of it being covered by Telegram's own frames. To fix this, Telegram provides *insets* — paddings describing how much space Telegram's UI takes at the edges. The app applies them in [`app.vue`](https://github.com/win7user10/laraue-boards/blob/master/app/app.vue) through an `applyInsets` step, adding inner paddings to the layout.
+Opening the app in the Telegram Mini App, we ran into part of it being covered by Telegram's own frames. To fix this, Telegram provides *insets* — paddings describing how much space Telegram's UI takes at the edges. The app applies them in [`app.vue`](https://github.com/Laraue/laraue-boards/blob/master/app/app.vue) through an `applyInsets` step, adding inner paddings to the layout.
 
 Insets alone do not fully solve the problem: apply them the safe way, as described in the documentation, and you can get large empty areas on the screen. Apply them the unsafe way, and the Telegram Mini App controls will overlap the app's UI elements. We settled on detecting that the app is running inside Telegram and adjusting the CSS separately for that case. We recommend debugging this part locally — making everything render nicely can take a lot of attempts.
 
 ## Conclusions
 
-The web app shows the user's issues on a board, pulled from the authenticated backend. Issues can be created, moved between statuses, and deleted, and every user works only with their own data. The line-by-line CRUD implementation was not covered — the code is in the repositories ([backend](https://github.com/win7user10/Laraue.Apps.Boards), [frontend](https://github.com/win7user10/laraue-boards)).
+The web app shows the user's issues on a board, pulled from the authenticated backend. Issues can be created, moved between statuses, and deleted, and every user works only with their own data. The line-by-line CRUD implementation was not covered — the code is in the repositories ([backend](https://github.com/Laraue/Laraue.Apps.Boards), [frontend](https://github.com/Laraue/laraue-boards)).
 
 Now it is time to show the app to people and get honest reactions. We posted about it in our Telegram channels, wrote a short product presentation on Threads for people who had never heard of it, and sent direct messages to friends asking them to try it. The goal is to watch how real people use the app and find out where it works and where it does not.
 

@@ -4,9 +4,9 @@ type: article
 projects: [real-estate]
 description: A technical deep-dive into an open-source real estate aggregator for Saint Petersburg — covering the C# / .NET 9 architecture, Ollama vision model integration, custom crawler design, and the ideality scoring formula.
 createdAt: 2026-04-16
-updatedAt: 2026-06-12
+updatedAt: 2026-09-30
 ---
-**Scraping JavaScript-rendered real estate listings in C#, scoring every photo with a local vision model, and ranking results by renovation quality** sounds like a weekend project until you hit the real problems: anti-bot redirects, GPU-bound inference blocking your crawler, and TensorFlow models that plateau at useless accuracy. This article walks through how [Laraue.Apps.RealEstate](https://github.com/win7user10/Laraue.Apps.RealEstate) solves each of these — with real code from the repo.
+**Scraping JavaScript-rendered real estate listings in C#, scoring every photo with a local vision model, and ranking results by renovation quality** sounds like a weekend project until you hit the real problems: anti-bot redirects, GPU-bound inference blocking your crawler, and TensorFlow models that plateau at useless accuracy. This article walks through how [Laraue.Apps.RealEstate](https://github.com/Laraue/Laraue.Apps.RealEstate) solves each of these — with real code from the repo.
 
 The live app is at [apartments.laraue.com](https://apartments.laraue.com). If you want to understand what it does from a user perspective rather than how it was built, see the [product overview](../projects/real-estate).
 
@@ -32,7 +32,7 @@ Cian (the primary Russian real estate aggregator) renders its listing pages with
 
 ### BaseCrawlingSchemaParser: Retry, Randomization, Anti-Bot
 
-`BaseCrawlingSchemaParser` ([source](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.AppServices/BaseCrawlingSchemaParser.cs)) handles the browser lifecycle and page navigation:
+`BaseCrawlingSchemaParser` ([source](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.AppServices/BaseCrawlingSchemaParser.cs)) handles the browser lifecycle and page navigation:
 
 ```csharp
 public Task<CrawlingResult> ParseLinkAsync(string link, CancellationToken cancellationToken = default)
@@ -63,7 +63,7 @@ if (result?.Url != link)
 
 ### CianCrawlingSchema: Declarative DOM Extraction
 
-`CianCrawlingSchema` ([source](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.AppServices/Cian/CianCrawlingSchema.cs)) defines the extraction logic declaratively using the `PuppeterSharpSchemaBuilder` fluent API from the [Laraue.Crawling](https://github.com/win7user10/Laraue.Crawling) library:
+`CianCrawlingSchema` ([source](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Crawling.AppServices/Cian/CianCrawlingSchema.cs)) defines the extraction logic declaratively using the `PuppeterSharpSchemaBuilder` fluent API from the [Laraue.Crawling](https://github.com/win7user10/Laraue.Crawling) library:
 
 ```csharp
 return new PuppeterSharpSchemaBuilder<CrawlingResult>()
@@ -146,7 +146,7 @@ The crawler requests listings sorted by newest first. On each run, `BaseRealEsta
 
 ### EstimateImagesRenovationJob
 
-`EstimateImagesRenovationJob` ([source](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.GpuWorkerHost/Jobs/EstimateImagesRenovationJob.cs)) runs in `GpuWorkerHost` on a 1-minute schedule. The job design follows a pattern worth highlighting: the **inner `IRepository` interface** co-locates the data access contract with the job that owns it:
+`EstimateImagesRenovationJob` ([source](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.GpuWorkerHost/Jobs/EstimateImagesRenovationJob.cs)) runs in `GpuWorkerHost` on a 1-minute schedule. The job design follows a pattern worth highlighting: the **inner `IRepository` interface** co-locates the data access contract with the job that owns it:
 
 ```csharp
 public class EstimateImagesRenovationJob(...) : BaseJob
@@ -253,7 +253,7 @@ The **renovation rating** for a listing is the average `RenovationRating` across
 
 ## Telegram Integration
 
-The system sends ranked apartment listings to Telegram via `AdvertisementsTelegramSender` ([source](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Telegram.AppServices/AdvertisementsTelegramSender.cs)). There are two delivery modes:
+The system sends ranked apartment listings to Telegram via `AdvertisementsTelegramSender` ([source](https://github.com/Laraue/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Telegram.AppServices/AdvertisementsTelegramSender.cs)). There are two delivery modes:
 
 **Personal selections.** Users configure a `Selection` with custom criteria — price range, number of rooms, district, minimum AI score, notification interval. The sender queries the database using those criteria and pushes results on the configured schedule. Pagination is handled via inline keyboard buttons with stateful callback routes, so users can navigate through results inside the same Telegram message thread.
 
@@ -269,7 +269,7 @@ The sender uses edit-vs-send logic: if a `messageId` is provided, it edits the e
 
 ## Source Code
 
-- **Main repo:** [github.com/win7user10/Laraue.Apps.RealEstate](https://github.com/win7user10/Laraue.Apps.RealEstate)
+- **Main repo:** [github.com/Laraue/Laraue.Apps.RealEstate](https://github.com/Laraue/Laraue.Apps.RealEstate)
 - **Crawler library:** [github.com/win7user10/Laraue.Crawling](https://github.com/win7user10/Laraue.Crawling)
 - **Live app:** [apartments.laraue.com](https://apartments.laraue.com)
 

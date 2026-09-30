@@ -4,7 +4,7 @@ type: project
 tags: [dotnet, csharp, cms, markdown, api, headless-cms, static-site, nuget]
 description: A lightweight .NET 10 library that turns Markdown files with frontmatter into a filterable, sortable REST API. Strongly typed content schemas, no database, no CMS overhead. Open source, MIT license.
 createdAt: 2025-11-01
-updatedAt: 2026-06-10
+updatedAt: 2026-09-30
 ---
 Building a blog or documentation site in .NET and don't want to drag in a full CMS? **Laraue.CmsBackend** is a lightweight .NET 10 library that turns **Markdown files stored in Git into a queryable REST API** — with filtering, sorting, frontmatter support, and strongly typed content schemas. No database required.
 
@@ -29,7 +29,7 @@ The available options didn't fit. Storing Markdown inside the frontend loses the
 
 **The result is a third path:** Markdown files in Git, served through a typed .NET API with frontmatter attribute support.
 
-> This blog itself is built on Laraue.CmsBackend. The full source code for the blog backend is publicly available at [Laraue.Apps.Blog on GitHub](https://github.com/win7user10/Laraue.Apps.Blog) — a working reference implementation you can inspect or fork.
+> This blog itself is built on Laraue.CmsBackend. The full source code for the blog backend is publicly available at [Laraue.Apps.Blog on GitHub](https://github.com/Laraue/Laraue.Apps.Blog) — a working reference implementation you can inspect or fork.
 
 ---
 
@@ -93,7 +93,7 @@ One of the library's core design decisions is **enforcing content schemas throug
 
 Each content category — blog posts, documentation pages, project pages — gets its own class that inherits `BaseContentType`. Properties marked `required` must be present in the Markdown frontmatter. If any file is missing a required field, **the application throws at startup**, making the problem immediately visible rather than manifesting as a broken page in production.
 
-Here's the real `Documentation` content type used on this blog ([source on GitHub](https://github.com/win7user10/Laraue.Apps.Blog/blob/main/src/Laraue.Apps.Blog.ApiHost/docTypes/Documentation.cs)):
+Here's the real `Documentation` content type used on this blog ([source on GitHub](https://github.com/Laraue/Laraue.Apps.Blog/blob/main/src/Laraue.Apps.Blog.ApiHost/docTypes/Documentation.cs)):
 
 ```csharp
 using Laraue.CmsBackend;
@@ -162,7 +162,7 @@ var cmsBackend = new CmsBackendBuilder(
 
 Rather than returning a raw `Dictionary<string, object>`, you can define explicit response DTOs and pass them as a generic type parameter. The library maps only the fields listed in `Properties` into your DTO — nothing more is serialized and sent to the client.
 
-Here's how the real blog controller ([source on GitHub](https://github.com/win7user10/Laraue.Apps.Blog/blob/main/src/Laraue.Apps.Blog.ApiHost/Controllers/BlogController.cs)) exposes a card list endpoint and a detail endpoint, each backed by its own DTO:
+Here's how the real blog controller ([source on GitHub](https://github.com/Laraue/Laraue.Apps.Blog/blob/main/src/Laraue.Apps.Blog.ApiHost/Controllers/BlogController.cs)) exposes a card list endpoint and a detail endpoint, each backed by its own DTO:
 
 ```csharp
 // Lightweight DTO for list views — only the fields the frontend card component needs
@@ -239,7 +239,7 @@ The library doesn't prescribe the API shape — you decide which endpoints to ex
 
 ## Real-World Usage: This Blog
 
-Laraue.CmsBackend isn't just a demo project — it powers the blog you're reading right now. The full backend source is available at [github.com/win7user10/Laraue.Apps.Blog](https://github.com/win7user10/Laraue.Apps.Blog), including the content folder structure, controller setup, and CI/CD workflow. If you're evaluating the library, this is the most direct reference for how it works in production.
+Laraue.CmsBackend isn't just a demo project — it powers the blog you're reading right now. The full backend source is available at [github.com/Laraue/Laraue.Apps.Blog](https://github.com/Laraue/Laraue.Apps.Blog), including the content folder structure, controller setup, and CI/CD workflow. If you're evaluating the library, this is the most direct reference for how it works in production.
 
 ---
 
@@ -281,4 +281,4 @@ Yes. The `GetEntitiesRequest` API supports filtering by any frontmatter attribut
 
 **Is there a working example I can reference?**
 
-Yes — the blog at [laraue.com/blog](https://laraue.com/blog) runs on Laraue.CmsBackend, and the full backend source is open at [github.com/win7user10/Laraue.Apps.Blog](https://github.com/win7user10/Laraue.Apps.Blog).
+Yes — the blog at [laraue.com/blog](https://laraue.com/blog) runs on Laraue.CmsBackend, and the full backend source is open at [github.com/Laraue/Laraue.Apps.Blog](https://github.com/Laraue/Laraue.Apps.Blog).

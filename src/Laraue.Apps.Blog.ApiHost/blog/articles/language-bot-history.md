@@ -3,10 +3,10 @@ title: Building a Vocabulary Learning Telegram Bot with C# and .NET 9
 description: A technical deep-dive into the architecture of an open-source Telegram vocabulary bot — covering the C# / .NET 9 stack, AI-powered auto-translation pipeline, data model, and local development setup.
 type: article
 createdAt: 2025-04-17
-updatedAt: 2025-04-17
+updatedAt: 2026-09-30
 projects: [learn-language]
 ---
-**[Laraue.Apps.LearnLanguage](https://github.com/win7user10/Laraue.Apps.LearnLanguage)** is an open-source Telegram bot for learning vocabulary in multiple languages. This article covers the architecture, design decisions, and technical details behind the project — useful reading if you're building a Telegram bot in C#, designing a data pipeline with AI translation, or just curious how a production language-learning app is structured.
+**[Laraue.Apps.LearnLanguage](https://github.com/Laraue/Laraue.Apps.LearnLanguage)** is an open-source Telegram bot for learning vocabulary in multiple languages. This article covers the architecture, design decisions, and technical details behind the project — useful reading if you're building a Telegram bot in C#, designing a data pipeline with AI translation, or just curious how a production language-learning app is structured.
 
 The deployed bot is [@learn_lang_bot](https://t.me/learn_lang_bot).
 
@@ -216,6 +216,6 @@ The planned roadmap includes:
 
 The project is MIT-licensed and open to contributions. The most common contribution is editing `translations.json` to add missing translations or correct existing ones — no C# knowledge required. For feature contributions, the architecture is clean and well-separated, making it straightforward to add new bot commands or extend the quiz engine.
 
-- **Repo:** [github.com/win7user10/Laraue.Apps.LearnLanguage](https://github.com/win7user10/Laraue.Apps.LearnLanguage)
+- **Repo:** [github.com/Laraue/Laraue.Apps.LearnLanguage](https://github.com/Laraue/Laraue.Apps.LearnLanguage)
 - **Live bot:** [@learn_lang_bot](https://t.me/learn_lang_bot)
 - **Landing page:** [laraue.com/learn-language-bot](https://laraue.com/learn-language-bot)

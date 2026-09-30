@@ -3,7 +3,7 @@ title: Jira-альтернатива в одиночку — зачем мы е�
 description: Часть 1 цикла о разработке Telegram-таск-трекера в одиночку с ИИ. Какую проблему мы решаем, зачем нужен ещё один таск-трекер, на каких двух репозиториях построен цикл статей.
 type: article
 createdAt: 2026-06-19 13:00
-updatedAt: 2026-09-29 11:00
+updatedAt: 2026-09-30 07:44
 projects: [boards]
 tags: [dotnet, nuxt, telegram, таск-трекер, devlog, архитектура]
 nextLink: prototyping-ui-with-ai-before-code
@@ -42,8 +42,8 @@ Laraue Boards доступны по адресу [boards.laraue.com](https://boa
 
 Два репозитория, на которых построен цикл статей:
 
-- **Бэкенд** — [Laraue.Apps.Boards](https://github.com/win7user10/Laraue.Apps.Boards) — .NET 10 / C#, PostgreSQL 18
-- **Фронтенд** — [laraue-boards](https://github.com/win7user10/laraue-boards) — Nuxt 4, Vue 3, TypeScript
+- **Бэкенд** — [Laraue.Apps.Boards](https://github.com/Laraue/Laraue.Apps.Boards) — .NET 10 / C#, PostgreSQL 18
+- **Фронтенд** — [laraue-boards](https://github.com/Laraue/laraue-boards) — Nuxt 4, Vue 3, TypeScript
 
 Далее в цикле статьи ссылаются на конкретные файлы в этих репозиториях.
 
